@@ -1,9 +1,9 @@
-name: "EduardAPI"
+name: "MineToolkit"
 description: "API de desenvolvimento de plugins que facilita sua vida"
-main: "net.eduard.api.EduardAPIMain"
-version: "1.7.7"
+main: "br.com.eduard.eduardapi.EduardAPIMain"
+version: "2.1.0"
 author: "Eduard"
-api-version: 1.16
+api-version: 1.18
 authors: [ "Eduard" ]
 softdepend: [ Multiverse-Core,Vault,PermissionEX,LegendChat,HolographicDisplays,Citizens,Essentials,JH_Shop ]
 website: "https://www.youtube.com/user/EduTutoriaisHD"

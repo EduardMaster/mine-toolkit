@@ -1,0 +1,14 @@
+package br.com.eduard.mine_toolkit.menu
+
+import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.InventoryHolder
+
+class FakeInventoryHolder(val menu: Menu) : InventoryHolder {
+    lateinit var openInventory: Inventory
+    var pageOpenned = 1
+
+    override fun getInventory(): Inventory {
+        return openInventory
+    }
+
+}

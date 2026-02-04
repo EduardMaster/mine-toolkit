@@ -4,27 +4,17 @@ plugins {
     `maven-publish`
 }
 
-group = "net.eduard.lib"
+group = "br.com.eduard"
 version = "1.0-SNAPSHOT"
 
-java.sourceCompatibility = JavaVersion.VERSION_1_8
-java.targetCompatibility = JavaVersion.VERSION_1_8
-tasks {
-    compileJava{
-        options.encoding = "UTF-8"
-    }
-    compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
-    }
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
-    }
-}
+java.sourceCompatibility = JavaVersion.VERSION_25
+java.targetCompatibility = JavaVersion.VERSION_25
+
 
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "net.eduard"
+            groupId = "br.com.eduard"
             artifactId = "javautils"
             version = project.version as String
             from(components["java"])
@@ -39,6 +29,6 @@ repositories {
 }
 
 dependencies {
-    compileOnly(kotlin("stdlib"))
-    compileOnly("org.bukkit:spigot:1.8.9")
+    compileOnly("com.google.code.gson:gson:2.11.0")
+   // compileOnly("org.bukkit:spigot:1.8.9")
 }
