@@ -37,13 +37,13 @@ class EduardAPIListener : EventsManager() {
             type == Material.PACKED_ICE ||
             type == Material.CHEST ||
             type == Material.TRAPPED_CHEST ||
-            type == Material.SKULL_ITEM ||
+            type == Material.LEGACY_SKULL_ITEM ||
             type == Material.ITEM_FRAME ||
             type == Material.ENDER_CHEST ||
             type == Material.BEDROCK ||
-            type == Material.SIGN_POST ||
-            type == Material.MOB_SPAWNER ||
-            type == Material.WALL_SIGN
+            type == Material.LEGACY_SIGN_POST ||
+            type == Material.LEGACY_MOB_SPAWNER ||
+            type == Material.LEGACY_WALL_SIGN
         ) {
             return
         }

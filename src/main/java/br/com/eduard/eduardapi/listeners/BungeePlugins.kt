@@ -1,8 +1,8 @@
 package br.com.eduard.eduardapi.listeners
 
-import net.eduard.api.core.Licence
+import br.com.eduard.eduardapi.core.Licence
 import br.com.eduard.mine_toolkit.config.Config
-import br.com.eduard.eduardapi.server.EduardBungeePlugin
+import br.com.eduard.mine_toolkit.plugin.EduardBungeePlugin
 import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.plugin.Listener
@@ -16,9 +16,9 @@ class BungeePlugins : Runnable, Listener {
         }
     }
 
-    private val activated = mutableSetOf<br.com.eduard.eduardapi.server.EduardBungeePlugin>()
-    private val disabled = mutableSetOf<br.com.eduard.eduardapi.server.EduardBungeePlugin>()
-    private val verifying = mutableSetOf<br.com.eduard.eduardapi.server.EduardBungeePlugin>()
+    private val activated = mutableSetOf<EduardBungeePlugin>()
+    private val disabled = mutableSetOf<EduardBungeePlugin>()
+    private val verifying = mutableSetOf<EduardBungeePlugin>()
     override fun run() {
         for (plugin in ProxyServer.getInstance().pluginManager.plugins) {
             if (plugin !is EduardBungeePlugin) continue

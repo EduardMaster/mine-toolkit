@@ -1,7 +1,7 @@
 package br.com.eduard.eduardapi.listeners
 
+import br.com.eduard.eduardapi.server.PluginHook
 import br.com.eduard.mine_toolkit.manager.EventsManager
-import net.eduard.api.server.PluginHook
 import org.bukkit.event.EventHandler
 import org.bukkit.event.server.PluginEnableEvent
 

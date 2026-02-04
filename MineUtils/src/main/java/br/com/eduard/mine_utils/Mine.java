@@ -9,6 +9,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.command.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -1135,7 +1136,7 @@ public final class Mine {
             return 6;
         if (type == Material.DIAMOND_PICKAXE)
             return 5;
-        if (type == Material.DIAMOND_SPADE)
+        if (type == Material.LEGACY_DIAMOND_SPADE)
             return 4;
         if (type == Material.DIAMOND_HOE)
             return 3;
@@ -1146,20 +1147,20 @@ public final class Mine {
             return 5;
         if (type == Material.IRON_PICKAXE)
             return 4;
-        if (type == Material.IRON_SPADE)
+        if (type == Material.LEGACY_IRON_SPADE)
             return 3;
         if (type == Material.IRON_HOE)
             return 2;
         //
-        if (type == Material.GOLD_SWORD)
+        if (type == Material.LEGACY_GOLD_SWORD)
             return 5;
-        if (type == Material.GOLD_AXE)
+        if (type == Material.LEGACY_GOLD_AXE)
             return 4;
-        if (type == Material.GOLD_PICKAXE)
+        if (type == Material.LEGACY_GOLD_PICKAXE)
             return 3;
-        if (type == Material.GOLD_SPADE)
+        if (type == Material.LEGACY_GOLD_SPADE)
             return 2;
-        if (type == Material.GOLD_HOE)
+        if (type == Material.LEGACY_GOLD_HOE)
             return 1;
         //
         if (type == Material.STONE_SWORD)
@@ -1168,20 +1169,20 @@ public final class Mine {
             return 4;
         if (type == Material.STONE_PICKAXE)
             return 3;
-        if (type == Material.STONE_SPADE)
+        if (type == Material.LEGACY_STONE_SPADE)
             return 2;
         if (type == Material.STONE_HOE)
             return 1;
         //
-        if (type == Material.WOOD_SWORD)
+        if (type == Material.LEGACY_WOOD_SWORD)
             return 4;
-        if (type == Material.WOOD_AXE)
+        if (type == Material.LEGACY_WOOD_AXE)
             return 3;
-        if (type == Material.WOOD_PICKAXE)
+        if (type == Material.LEGACY_WOOD_PICKAXE)
             return 2;
-        if (type == Material.WOOD_SPADE)
+        if (type == Material.LEGACY_WOOD_SPADE)
             return 1;
-        if (type == Material.WOOD_HOE)
+        if (type == Material.LEGACY_WOOD_HOE)
             return 1;
         return 0;
     }
@@ -1239,7 +1240,7 @@ public final class Mine {
     public static Enchantment parseEnchant(Object object) {
         String str = object.toString().replace("_", "").trim();
         for (Enchantment enchant : Enchantment.values()) {
-            if (str.equals("" + enchant.getId())) {
+            if (str.equals("" + enchant.getKey())) {
                 return enchant;
             }
             if (str.equalsIgnoreCase(enchant.getName().replace("_", ""))) {
@@ -1751,7 +1752,6 @@ public final class Mine {
      * @param <T>      Entidade Alvo encontrada
      * @return Entidade Alvo encontrada se exister
      */
-    @SuppressWarnings("unchecked")
     public static <T extends Player> T getTarget(Player entity, Iterable<T> entities) {
         if (entity == null)
             return null;
@@ -1769,12 +1769,12 @@ public final class Mine {
                 }
             }
         }
-        return (T) target;
+        return (T) target ;
     }
 
     public static Location getTargetLoc(LivingEntity entity, int distance) {
         @SuppressWarnings("deprecation")
-        Block block = entity.getTargetBlock((HashSet<Byte>) null, distance);
+        Block block = entity.getTargetBlock((HashSet<Material>) null, distance);
         return block.getLocation();
     }
 
@@ -2030,7 +2030,7 @@ public final class Mine {
      */
     public static World loadWorld(String name) {
         return new WorldCreator(name).environment(World.Environment.NORMAL)
-                .type(WorldType.CUSTOMIZED)
+                .type(WorldType.NORMAL)
                 .generator(new EmptyWorldGenerator()).createWorld();
     }
 
@@ -2282,7 +2282,7 @@ public final class Mine {
     }
 
     public static ItemStack newFireworkCharge() {
-        ItemStack fire = new ItemStack(Material.FIREWORK_CHARGE);
+        ItemStack fire = new ItemStack(Material.LEGACY_FIREWORK_CHARGE);
         FireworkEffectMeta meta = (FireworkEffectMeta) fire.getItemMeta();
         meta.setEffect(FireworkEffect.builder().withColor(Color.RED).with(FireworkEffect.Type.STAR).build());
         fire.setItemMeta(meta);
@@ -2320,7 +2320,7 @@ public final class Mine {
      * @return Nova cabeça com nova skin
      */
     public static ItemStack newHeadSkin(String url, String nome, int amount, List<String> lore) {
-        ItemStack item = new ItemStack(Material.SKULL_ITEM, amount, (short) 3);
+        ItemStack item = new ItemStack(Material.LEGACY_SKULL_ITEM, amount, (short) 3);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(nome);
         meta.setLore(lore);
@@ -2355,7 +2355,7 @@ public final class Mine {
      * @return O Item da Cabeça do jogador criada
      */
     public static ItemStack newHead(String name, String owner, int amount, List<String> lore) {
-        ItemStack item = new ItemStack(Material.SKULL_ITEM, amount, (short) SkullType.PLAYER.ordinal());
+        ItemStack item = new ItemStack(Material.LEGACY_SKULL_ITEM, amount, (short) SkullType.PLAYER.ordinal());
         SkullMeta meta = (SkullMeta) item.getItemMeta();
         meta.setOwner(owner);
         meta.setDisplayName(name);
@@ -2375,7 +2375,7 @@ public final class Mine {
      * @return O Item da Cabeça do jogador criada
      */
     public static ItemStack newHead(String name, String owner, int amount, String... lore) {
-        ItemStack item = new ItemStack(Material.SKULL_ITEM, amount, (short) SkullType.PLAYER.ordinal());
+        ItemStack item = new ItemStack(Material.LEGACY_SKULL_ITEM, amount, (short) SkullType.PLAYER.ordinal());
         SkullMeta meta = (SkullMeta) item.getItemMeta();
         meta.setOwner(owner);
         meta.setDisplayName(name);
@@ -2405,7 +2405,7 @@ public final class Mine {
 
     public static ItemStack newHead(String name, String skull, String... lore) {
 
-        return setHead(newItem(Material.SKULL_ITEM, name, 1, 3, lore), skull);
+        return setHead(newItem(Material.LEGACY_SKULL_ITEM, name, 1, 3, lore), skull);
     }
 
     /**
@@ -2968,7 +2968,9 @@ public final class Mine {
                     || location.getBlockX() == playerLocation.getBlockX() - size
                     || location.getBlockZ() == playerLocation.getBlockZ() - size) {
                 location.getBlock().setType(down.getItemType());
+                var data = location.getBlock().getBlockData();
                 location.getBlock().setData(down.getData());
+
                 return true;
             }
             if (clearInside) {

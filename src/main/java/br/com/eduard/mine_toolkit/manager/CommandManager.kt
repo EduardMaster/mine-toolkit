@@ -2,13 +2,18 @@ package br.com.eduard.mine_toolkit.manager
 
 import br.com.eduard.mine_toolkit.kotlin.formatColors
 import br.com.eduard.java_utils.Extra
+import br.com.eduard.mine_toolkit.server.CurrencySystem
+import br.com.eduard.mine_utils.FakePlayer
 import br.com.eduard.mine_utils.Mine
 import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.command.*
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
+import java.util.Locale.getDefault
 
 open class CommandManager(var name: String, vararg aliases: String) : EventsManager(), TabCompleter, CommandExecutor {
 
@@ -54,8 +59,7 @@ open class CommandManager(var name: String, vararg aliases: String) : EventsMana
     var permissionMessage = Mine.MSG_NO_PERMISSION
 
 
-    val command: PluginCommand
-        get() = Bukkit.getPluginCommand(name)
+    val command: PluginCommand? get() = Bukkit.getPluginCommand(name)
 
     init {
         this.aliases = aliases.toMutableList()
@@ -131,7 +135,7 @@ open class CommandManager(var name: String, vararg aliases: String) : EventsMana
         val vars = ArrayList<String>()
         var cmdSelected = this
         for (index in args.indices) {
-            val arg = args[index].toLowerCase()
+            val arg = args[index].lowercase(getDefault())
             vars.clear()
             var sub: CommandManager? = null
             for (subCMD in cmdSelected.subCommands.values) {
@@ -193,10 +197,10 @@ open class CommandManager(var name: String, vararg aliases: String) : EventsMana
             }
         }
         if (command.permission != null) {
-            permission = command.permission
+            permission = command.permission.toString()
         }
         if (command.permissionMessage != null) {
-            permissionMessage = command.permissionMessage.formatColors()
+            permissionMessage = command.permissionMessage?.formatColors()
         }
         if (command.description != null) {
             description = command.description.formatColors()
@@ -210,12 +214,12 @@ open class CommandManager(var name: String, vararg aliases: String) : EventsMana
         command.aliases = aliases
         command.description = description
         command.permission = permission
-        command.executor = this
+        command.setExecutor(this)
         log(
             "O comando §a" + name + " §ffoi registrado para o Plugin §b" + command.plugin.name
                     + "§f pela plugin.yml"
         )
-        commandsRegistred[name.toLowerCase()] = this
+        commandsRegistred[name.lowercase(getDefault())] = this
         updateSubs()
         registerListener(plugin)
         return true
@@ -241,11 +245,11 @@ open class CommandManager(var name: String, vararg aliases: String) : EventsMana
         command.permission = permission
         log("O comando §a" + name + " §ffoi registrado para o Plugin §b" + plugin.name + "§f sem plugin.yml")
 
-        commandsRegistred[name.toLowerCase()] = this
+        commandsRegistred[name.lowercase(getDefault())] = this
         commandRegistred = command
         updateSubs()
         registerListener(plugin)
-        Bukkit.getScheduler().runTask(plugin) {
+        Bukkit.getScheduler().runTask(plugin, Runnable {
             try {
                 val registrado = getServerCommandsMap()?.register(plugin.name, command) ?: false
                 log("O Comando $name foi registrado com sucesso: $registrado")
@@ -253,21 +257,21 @@ open class CommandManager(var name: String, vararg aliases: String) : EventsMana
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
-        }
+        })
 
     }
 
 
     fun unregisterCommand() {
         val command =  commandRegistred ?: return
-        val cmdName = command.name.toLowerCase()
-        val pluginName = plugin.name.toLowerCase()
-        commandsRegistred.remove(name.toLowerCase())
+        val cmdName = command.name.lowercase(getDefault())
+        val pluginName = plugin.name.lowercase(getDefault())
+        commandsRegistred.remove(name.lowercase(getDefault()))
         commandsRegistred.remove(name)
-        command.unregister(getServerCommandsMap())
+        command.unregister(getServerCommandsMap()!!)
         val commandsMap = getServerCommandsHashMap()!!
         for (aliase in aliases) {
-            val aliasLowercase = aliase.toLowerCase()
+            val aliasLowercase = aliase.lowercase(getDefault())
             log("Removendo aliase §a$aliase§f do comando §b$cmdName")
             commandsMap.remove(aliasLowercase)
             commandsMap.remove("$pluginName:$aliasLowercase")
@@ -342,7 +346,7 @@ open class CommandManager(var name: String, vararg aliases: String) : EventsMana
         }
 
         fun getCommand(name: String): CommandManager {
-            return commandsRegistred[name.toLowerCase()]!!
+            return commandsRegistred[name.lowercase(getDefault())]!!
         }
 
         fun log(message: String) {
@@ -364,7 +368,7 @@ open class CommandManager(var name: String, vararg aliases: String) : EventsMana
                     sender.sendMessage("§cPlugin ${command.plugin.name} foi desabilitado.")
                     return false
                 }
-                if (sender.hasPermission(permission)) {
+                if (sender.hasPermission(permission!!)) {
                     return command.onCommand(sender, this, label, args)
                 } else {
                     command.sendPermissionMessage(sender)
@@ -378,7 +382,7 @@ open class CommandManager(var name: String, vararg aliases: String) : EventsMana
         }
 
         @Throws(IllegalArgumentException::class)
-        override fun tabComplete(sender: CommandSender, alias: String, args: Array<String>): List<String>? {
+        override fun tabComplete(sender: CommandSender, alias: String, args: Array<String>): List<String?> {
 
             val tabCompletePossible = command.onTabComplete(sender, this, name, args)
             return tabCompletePossible ?: super.tabComplete(sender, alias, args)

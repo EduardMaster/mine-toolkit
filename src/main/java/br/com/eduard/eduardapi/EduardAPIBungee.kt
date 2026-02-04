@@ -1,12 +1,12 @@
 package br.com.eduard.eduardapi
 
-import net.eduard.api.command.bungee.BungeeReloadCommand
 import br.com.eduard.mine_toolkit.bungee.BungeeAPI
 import br.com.eduard.mine_toolkit.bungee.ServerSpigot
 import br.com.eduard.mine_toolkit.config.Config
 import br.com.eduard.database.DBManager
-import net.eduard.api.lib.database.HybridTypes
+import br.com.eduard.database.HybridTypes
 import br.com.eduard.database.SQLManager
+import br.com.eduard.eduardapi.commands.bungee.BungeeReloadCommand
 import br.com.eduard.mine_toolkit.hybrid.BungeeServer
 import br.com.eduard.mine_toolkit.hybrid.Hybrid
 import br.com.eduard.java_utils.Copyable
@@ -15,7 +15,7 @@ import br.com.eduard.mine_toolkit.plugin.IPluginInstance
 import br.com.eduard.mine_toolkit.plugin.PluginSettings
 import br.com.eduard.storage.StorageAPI
 import br.com.eduard.eduardapi.listeners.BungeePlugins
-import net.eduard.api.task.BungeeDatabaseUpdaterTask
+import br.com.eduard.eduardapi.tasks.BungeeDatabaseUpdaterTask
 import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.plugin.Plugin
@@ -23,6 +23,8 @@ import java.io.File
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.*
+import java.util.Locale
+import java.util.Locale.getDefault
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
@@ -138,10 +140,10 @@ class EduardAPIBungee(val plugin: Plugin) : IPluginInstance {
 
         if (!getBoolean("bungee-api")) return
         for (server in sqlManager.getAll<ServerSpigot>()) {
-            BungeeAPI.servers[server.name.toLowerCase()] = server
+            BungeeAPI.servers[server.name.lowercase(getDefault())] = server
         }
         for (server in ProxyServer.getInstance().servers.values) {
-            val spigot = BungeeAPI.servers[server.name.toLowerCase()]
+            val spigot = BungeeAPI.servers[server.name.lowercase(getDefault())]
             if (spigot == null) {
                 val servidor = BungeeAPI.getServer(server.name)
                 servidor.host = server.address.hostName

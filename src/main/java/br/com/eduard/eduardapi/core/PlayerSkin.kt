@@ -9,6 +9,8 @@ import br.com.eduard.eduardapi.EduardAPI
 import br.com.eduard.mine_toolkit.config.Config
 import org.bukkit.entity.Player
 import java.lang.Exception
+import java.util.Locale
+import java.util.Locale.getDefault
 
 class PlayerSkin {
     constructor() {}
@@ -46,8 +48,8 @@ class PlayerSkin {
             ex.printStackTrace()
         }
         println("Atualizando skin do " + player.name)
-        Minecraft.instance.respawnPlayer(player)
-        Minecraft.instance.reloadPlayer(player)
+        //Minecraft.instance.respawnPlayer(player)
+        //Minecraft.instance.reloadPlayer(player)
 
     }
 
@@ -66,7 +68,7 @@ class PlayerSkin {
         private val config = Config(EduardAPI.instance, "skins.yml")
         fun saveSkins() {
             for (skin in skins.values) {
-                config[skin.playerName!!.toLowerCase()] = skin
+                config[skin.playerName!!.lowercase(getDefault())] = skin
             }
             config.saveConfig()
         }
@@ -75,15 +77,15 @@ class PlayerSkin {
             skins.clear()
             for (subSecao in config.keys) {
                 val skin = config.get(subSecao, PlayerSkin::class.java)
-                skins[skin.playerName!!.toLowerCase()] = skin
+                skins[skin.playerName!!.lowercase(getDefault())] = skin
             }
         }
 
         fun getSkin(playerName: String): PlayerSkin {
-            var skin = skins[playerName.toLowerCase()]
+            var skin = skins[playerName.lowercase(getDefault())]
             if (skin == null) {
                 skin = PlayerSkin(playerName)
-                if (skin.exists()) skins[playerName.toLowerCase()] = skin
+                if (skin.exists()) skins[playerName.lowercase(getDefault())] = skin
             }
             return skin
         }

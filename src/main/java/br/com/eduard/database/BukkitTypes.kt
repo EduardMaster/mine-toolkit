@@ -1,6 +1,5 @@
 package br.com.eduard.database
 
-import br.com.eduard.java_utils.Extra
 import br.com.eduard.mine_utils.FakePlayer
 import org.bukkit.Bukkit
 import org.bukkit.Location

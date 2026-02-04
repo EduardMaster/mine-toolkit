@@ -10,6 +10,7 @@ import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.Locale
 import java.util.Locale.getDefault
+import java.lang.Runnable
 
 class BukkitCommand(val command: br.com.eduard.mine_toolkit.command.Command)
     : Command(command.name),
@@ -92,14 +93,13 @@ class BukkitCommand(val command: br.com.eduard.mine_toolkit.command.Command)
         cmd.description = command.description
 
         if (!registred) {
-            Bukkit.getScheduler().runTask(plugin) {
+            Bukkit.getScheduler().runTask(plugin, Runnable {
                 val serverClass = Extra.getClassFrom(Bukkit.getServer())
                 val field = serverClass.getDeclaredField("commandMap")
                 field.isAccessible = true
                 val map = field[Bukkit.getServer()] as CommandMap
                 map.register(plugin.name, cmd)
-                return@runTask
-            }
+            });
         }
     }
 

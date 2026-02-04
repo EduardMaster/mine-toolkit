@@ -2,6 +2,8 @@ package br.com.eduard.mine_toolkit.bungee
 
 import br.com.eduard.mine_toolkit.hybrid.Hybrid
 import java.lang.Exception
+import java.util.Locale
+import java.util.Locale.getDefault
 
 object BungeeAPI {
 
@@ -17,7 +19,7 @@ object BungeeAPI {
 
 
     fun getServer(serverName: String): ServerSpigot {
-        return servers.getOrPut(serverName.toLowerCase()) {
+        return servers.getOrPut(serverName.lowercase(getDefault())) {
             ServerSpigot(serverName)
         }
     }

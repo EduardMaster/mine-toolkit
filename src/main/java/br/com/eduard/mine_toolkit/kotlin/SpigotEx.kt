@@ -4,6 +4,8 @@ import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.TextComponent
+import java.util.Locale
+import java.util.Locale.getDefault
 
 fun confirmationChat(
     acceptCommand: String, declineCommand: String,
@@ -26,7 +28,7 @@ fun confirmationChat(
 inline val String.chat get() = TextComponent(this).fixColors()
 
 fun String.lastChatColor(): ChatColor {
-    val array = toLowerCase().toCharArray()
+    val array = lowercase(getDefault()).toCharArray()
     var lastColor = ChatColor.WHITE
     var lastChar = 0.toChar()
     for (caracter in array) {

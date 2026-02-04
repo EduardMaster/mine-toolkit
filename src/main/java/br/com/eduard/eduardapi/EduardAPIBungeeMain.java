@@ -1,6 +1,6 @@
 package br.com.eduard.eduardapi;
 
-import br.com.eduard.eduardapi.LibraryLoader;
+import br.com.eduard.eduardapi.core.LibraryLoader;
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.io.File;

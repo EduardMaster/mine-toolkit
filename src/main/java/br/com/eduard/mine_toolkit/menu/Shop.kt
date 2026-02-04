@@ -8,11 +8,11 @@ import br.com.eduard.mine_utils.MineReflect
 import br.com.eduard.mine_utils.VaultAPI
 import br.com.eduard.mine_utils.game.ItemBuilder
 import br.com.eduard.mine_toolkit.kotlin.player
-import net.eduard.api.server.currency.CurrencyManager
+import br.com.eduard.mine_toolkit.manager.CurrencyManager
 import br.com.eduard.mine_toolkit.plugin.IPluginInstance
+import br.com.eduard.mine_toolkit.server.CurrencySystem
 import br.com.eduard.storage.api.annotations.StorageAttributes
 
-import net.eduard.api.server.CurrencySystem
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -158,15 +158,13 @@ open class Shop(name: String, lineAmount: Int) : Menu(name, lineAmount) {
             cantBeOpened()
             button("confirmar") {
                 setPosition(3, 2)
-                icon = ItemBuilder(Material.WOOL)
-                    .data(5)
+                icon = ItemBuilder(Material.GREEN_WOOL)
                     .name("§a§lCONFIRMAR")
                     .lore("§aClique para confirmar a transação.")
             }
 
             button("cancelar") {
-                icon = ItemBuilder(Material.WOOL)
-                    .data(14)
+                icon = ItemBuilder(Material.RED_WOOL)
                     .name("§c§lCANCELAR")
                     .lore("§cClique para cancelar a transação.")
                 setPosition(7, 2)
@@ -401,8 +399,7 @@ open class Shop(name: String, lineAmount: Int) : Menu(name, lineAmount) {
                     val productButton = menuUpgrades?.getButton("product")!!
                     inventory.setItem(productButton.index, product.icon)
                     for (upgrade in product.upgrades) {
-                        val icon = ItemBuilder(Material.STAINED_GLASS_PANE)
-                            .data(14)
+                        val icon = ItemBuilder(Material.RED_STAINED_GLASS_PANE)
                             .name("§6Upgrade §e" + upgrade.displayName)
                         if (upgrade.hasBought(player)) {
                             icon.data(5)
@@ -453,8 +450,8 @@ open class Shop(name: String, lineAmount: Int) : Menu(name, lineAmount) {
 
         this.effect = ClickEffect { event ->
             val player = event.player
-            if (event.currentItem == null) return@ClickEffect
-            val product = getProduct(event.currentItem, player)
+            val item = event.currentItem?:return@ClickEffect;
+            val product = getProduct(item, player)
             if (product == null) {
                 debug("Produto pelo Icone nulo")
                 return@ClickEffect

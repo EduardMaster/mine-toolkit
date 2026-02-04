@@ -8,6 +8,8 @@ import org.bukkit.entity.Player
 import org.bukkit.plugin.messaging.PluginMessageListener
 import java.io.IOException
 import java.lang.ClassNotFoundException
+import java.util.Locale
+import java.util.Locale.getDefault
 
 class BukkitMessageListener(var bukkitController: BukkitController) : PluginMessageListener {
     fun readMessage(arrayIn: ByteArrayInputStream, data: DataInputStream) {
@@ -17,7 +19,7 @@ class BukkitMessageListener(var bukkitController: BukkitController) : PluginMess
             val tag = objStream.readUTF()
             if (tag == "server-update") {
                 val spigot = objStream.readObject() as ServerSpigot
-                BungeeAPI.servers[spigot.name.toLowerCase()] = spigot
+                BungeeAPI.servers[spigot.name.lowercase(getDefault())] = spigot
             } else {
                 val line = data.readUTF()
                 bukkitController.receiveMessage(server, tag, line)

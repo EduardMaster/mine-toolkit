@@ -24,7 +24,7 @@ open class EffectManager {
 
     fun playEffects(player: Player) {
         if (requirePermission != null)
-            if (!player.hasPermission(requirePermission))
+            if (!player.hasPermission(requirePermission!!))
                 return
         for (cmd in consoleCommandsToRun) {
             Mine.runCommand(cmd.replace("%player", player.name))

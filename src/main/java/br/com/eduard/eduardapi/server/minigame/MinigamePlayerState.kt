@@ -1,9 +1,0 @@
-package br.com.eduard.eduardapi.server.minigame
-
-/**
- * Estado do Jogador de um Minigame
- * @author Eduard
- */
-enum class MinigamePlayerState {
-    NORMAL, SPECTATOR, ADMIN, WINNER, GHOST
-}

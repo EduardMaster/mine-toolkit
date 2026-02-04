@@ -28,6 +28,8 @@ import org.bukkit.plugin.java.JavaPlugin
 import java.lang.Exception
 import java.lang.IllegalStateException
 import java.util.*
+import java.util.Locale
+import java.util.Locale.getDefault
 import java.util.function.Consumer
 import java.util.function.Function
 
@@ -86,7 +88,7 @@ open class Menu(
 
 
     @StorageIndex
-    var index = title.toLowerCase().replace(" ", "_")
+    var index = title.lowercase(getDefault()).replace(" ", "_")
 
     @Transient
     var autoAlignPerLine = 7
@@ -180,9 +182,9 @@ open class Menu(
     var backPageSound: SoundEffect? = null
 
     fun enableSounds() {
-        previousPageSound = SoundEffect(Sound.CLICK, 2f, 2f)
-        nextPageSound = SoundEffect(Sound.CLICK, 2f, 2f)
-        backPageSound = SoundEffect(Sound.CLICK, 2f, 2f)
+        previousPageSound = SoundEffect(Sound.UI_BUTTON_CLICK, 2f, 2f)
+        nextPageSound = SoundEffect(Sound.UI_BUTTON_CLICK, 2f, 2f)
+        backPageSound = SoundEffect(Sound.UI_BUTTON_CLICK, 2f, 2f)
     }
 
 
@@ -520,7 +522,7 @@ open class Menu(
 
         if (isCacheInventories && pagesCache.containsKey(page)) {
             this.pageOpened[player] = page
-            player.openInventory(pagesCache[page])
+            player.openInventory(pagesCache[page]!!)
         } else {
             var customLineAmount = lineAmount
             if (lineAmountPerPlayer != null) {
@@ -572,7 +574,7 @@ open class Menu(
      */
     open fun canOpen(player: Player): Boolean {
         if (openNeedPermission != null) {
-            if (!player.hasPermission(openNeedPermission)) {
+            if (!player.hasPermission(openNeedPermission!!)) {
                 player.sendMessage(messagePermission)
                 return false
             }
@@ -734,7 +736,7 @@ open class Menu(
         val player = event.player
         val message = event.message
         openWithCommandText ?: return
-        if (message.toLowerCase().startsWith(openWithCommandText!!.toLowerCase())) {
+        if (message.lowercase(getDefault()).startsWith(openWithCommandText!!.lowercase(getDefault()))) {
             event.isCancelled = true
             open(player)
         }

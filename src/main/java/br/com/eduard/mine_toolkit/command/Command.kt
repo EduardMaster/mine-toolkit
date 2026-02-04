@@ -6,6 +6,8 @@ import br.com.eduard.mine_toolkit.hybrid.ISender
 import br.com.eduard.java_utils.Extra
 import br.com.eduard.mine_toolkit.plugin.IPluginInstance
 import java.util.ArrayList
+import java.util.Locale
+import java.util.Locale.getDefault
 
 open class Command(
     override var name: String = "comando",
@@ -92,7 +94,7 @@ open class Command(
         val vars = ArrayList<String>()
         var cmd = this
         for (index in args.indices) {
-            val arg = args[index].toLowerCase()
+            val arg = args[index].lowercase(getDefault())
             vars.clear()
             var sub: Command? = null
             for (subcmd in cmd.subCommands) {
@@ -124,7 +126,7 @@ open class Command(
     fun processCommand(sender: ISender, args: List<String>) {
         var cmd = this
         for (index in args.indices) {
-            val arg = args[index].toLowerCase()
+            val arg = args[index].lowercase(getDefault())
             var sub: Command? = null
             for (subcmd in cmd.subCommands) {
                 if (subcmd.name.equals(arg, ignoreCase = true)) {

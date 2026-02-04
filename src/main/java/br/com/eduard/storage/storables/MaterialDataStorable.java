@@ -12,21 +12,21 @@ public class MaterialDataStorable implements Storable<MaterialData> {
 
     @Override
     public MaterialData newInstance() {
-        return new MaterialData(1);
+        return new MaterialData(Material.AIR);
     }
 
     @Override
     public String store(MaterialData materialData) {
-        return materialData.getItemTypeId() + ";" + materialData.getData();
+        return materialData.getItemType().getKey() + ";" + materialData.getData();
     }
 
     public MaterialData restore(String string) {
         try {
             if (string.contains(";")) {
                 String[] split = string.split(";");
-                return new MaterialData(Material.getMaterial(Extra.toInt(split[0])), Extra.toByte(split[1]));
+                return new MaterialData(Material.getMaterial(split[0]), Extra.toByte(split[1]));
             }else{
-                return  new MaterialData(Material.getMaterial(Extra.toInt(string)));
+                return  new MaterialData(Material.getMaterial(string));
             }
         } catch (Exception e) {
             e.printStackTrace();

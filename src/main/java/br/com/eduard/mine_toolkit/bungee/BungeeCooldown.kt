@@ -1,6 +1,6 @@
 package br.com.eduard.mine_toolkit.bungee
 
-import net.eduard.api.EduardAPIBungee
+import br.com.eduard.eduardapi.EduardAPIBungee
 import java.util.UUID
 import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.connection.ProxiedPlayer

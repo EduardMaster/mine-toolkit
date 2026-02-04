@@ -11,6 +11,7 @@ import com.google.gson.*;
 import br.com.eduard.mine_utils.game.ItemBuilder;
 import br.com.eduard.storage.StorageAPI;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -35,18 +36,18 @@ public class ItemStackStorable implements Storable<ItemStack>, JsonSerializer<It
         return jsonSerializationContext.serialize(StorageAPI.store(ItemStack.class, itemStack));
     }
 
-    private static Method isLegacy = null;
-    private static Method getTypeId = null;
+    private static Method isLegacyMethod = null;
+    private static Method getTypeIdMethod = null;
     private static final Map<Integer, Material> typesByID = new HashMap<>();
 
     static {
         try {
-            isLegacy = Extra.getMethod(Material.class, "isLegacy");
+            isLegacyMethod = Extra.getMethod(Material.class, "isLegacy");
             Map<String, Material> mats = (Map<String, Material>) Extra.getFieldValue(Material.class, "BY_NAME");
             for (Entry<String, Material> entry : mats.entrySet()) {
                 Material mat = entry.getValue();
                 if (mat == null) continue;
-                boolean isOld = (boolean) isLegacy.invoke(mat);
+                boolean isOld = (boolean) isLegacyMethod.invoke(mat);
                 //Mine.console("§aMaterialName: "+mat.name());
                 //Mine.console("§aMaterialString: "+mat.toString());
                 if (isOld) {
@@ -58,15 +59,15 @@ public class ItemStackStorable implements Storable<ItemStack>, JsonSerializer<It
             // ex.printStackTrace();
         }
         try {
-            getTypeId = Extra.getMethod(ItemStack.class, "getTypeId");
+            getTypeIdMethod = Extra.getMethod(ItemStack.class, "getTypeId");
         } catch (Exception ignored) {
         }
     }
 
     public static int getTypeId(ItemStack itemStack) {
-        if (getTypeId != null) {
+        if (getTypeIdMethod != null) {
             try {
-                return (int) getTypeId.invoke(itemStack);
+                return (int) getTypeIdMethod.invoke(itemStack);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -80,15 +81,6 @@ public class ItemStackStorable implements Storable<ItemStack>, JsonSerializer<It
         return new ItemStack(Material.STONE);
     }
 
-    public static Material getMaterial(int id) {
-        if (isLegacy != null) {
-            return typesByID.get(id);
-        } else {
-            return Material.getMaterial(id);
-        }
-    }
-
-
     @Override
     public ItemStack restore(Map<String, Object> map) {
         int amount = (map.containsKey("amount")) ? Extra.toInt(map.get("amount")) : 1;
@@ -97,7 +89,7 @@ public class ItemStackStorable implements Storable<ItemStack>, JsonSerializer<It
         String typeName = null;
         if (map.containsKey("id")) {
             int id = Extra.toInt(map.get("id"));
-            type = getMaterial(id);
+            type = typesByID.get(id);
         }
         if (map.containsKey("type")) {
             try {
@@ -152,7 +144,7 @@ public class ItemStackStorable implements Storable<ItemStack>, JsonSerializer<It
                 for (String enchantLine : enchants) {
                     String[] sub = enchantLine.split(";");
                     @SuppressWarnings("deprecation")
-                    Enchantment ench = Enchantment.getById(Extra.toInt(sub[0]));
+                    Enchantment ench = Enchantment.getByKey(NamespacedKey.fromString(sub[0]));
                     Integer level = Extra.toInt(sub[1]);
                     item.addUnsafeEnchantment(ench, level);
                 }
@@ -207,8 +199,7 @@ public class ItemStackStorable implements Storable<ItemStack>, JsonSerializer<It
 
     @Override
     public void store(Map<String, Object> map, ItemStack item) {
-
-        if (isLegacy != null) {
+        if (isLegacyMethod != null) {
             map.put("type", item.getType().toString());
         } else {
             int id = getTypeId(item);
@@ -239,7 +230,7 @@ public class ItemStackStorable implements Storable<ItemStack>, JsonSerializer<It
             try {
                 for (Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet()) {
                     Enchantment enchantment = entry.getKey();
-                    enchants.add(enchantment.getId() + ";" + entry.getValue());
+                    enchants.add(enchantment.getKey() + ";" + entry.getValue());
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -264,8 +255,8 @@ public class ItemStackStorable implements Storable<ItemStack>, JsonSerializer<It
                     return;
                 if (textures.size() == 0) return;
                 for (Property texture : textures) {
-                    map.put("texture-value", texture.getValue());
-                    map.put("texture-signature", texture.getSignature());
+                    map.put("texture-value", texture.value());
+                    map.put("texture-signature", texture.signature());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -281,10 +272,10 @@ public class ItemStackStorable implements Storable<ItemStack>, JsonSerializer<It
             String[] splitData = split[0].split("-");
             Integer qnt = Extra.toInt(splitData[1]);
             String[] splitInfo = splitData[0].split(":");
-            Integer id = Extra.toInt(splitInfo[0]);
+            Material material = Material.getMaterial(splitInfo[0]);
             short data = Extra.toShort(splitInfo[1]);
-            ItemStack item = new ItemStack(1);
-            item.setTypeId(id);
+            ItemStack item = new ItemStack(Material.AIR);
+            item.setType(material);
             item.setDurability(data);
             item.setAmount(qnt);
             if (split.length > 0) {
@@ -292,16 +283,16 @@ public class ItemStackStorable implements Storable<ItemStack>, JsonSerializer<It
                     String[] enchs = split[1].split(",");
                     for (String enchant : enchs) {
                         String[] ench = enchant.split("-");
-                        Integer ench_id = Extra.toInt(ench[0]);
+                        NamespacedKey ench_id = NamespacedKey.fromString(ench[0]);
                         Integer ench_level = Extra.toInt(ench[1]);
-                        item.addUnsafeEnchantment(Enchantment.getById(ench_id), ench_level);
+                        item.addUnsafeEnchantment(Enchantment.getByKey(ench_id), ench_level);
                     }
                 } else {
                     if (!split[1].equals(" ")) {
                         String[] ench = split[1].split("-");
-                        Integer ench_id = Extra.toInt(ench[0]);
+                        NamespacedKey ench_id = NamespacedKey.fromString(ench[0]);
                         Integer ench_level = Extra.toInt(ench[1]);
-                        item.addUnsafeEnchantment(Enchantment.getById(ench_id), ench_level);
+                        item.addUnsafeEnchantment(Enchantment.getByKey(ench_id), ench_level);
                     }
 
                 }
@@ -327,7 +318,7 @@ public class ItemStackStorable implements Storable<ItemStack>, JsonSerializer<It
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ItemStack(1);
+            return new ItemStack(Material.AIR);
         }
 
 
@@ -337,7 +328,7 @@ public class ItemStackStorable implements Storable<ItemStack>, JsonSerializer<It
     @Override
     public String store(ItemStack item) {
         StringBuilder textao = new StringBuilder();
-        textao.append(item.getTypeId() + ":" + item.getDurability() + "-" + item.getAmount() + ";");
+        textao.append(item.getType().getKey() + ":" + item.getDurability() + "-" + item.getAmount() + ";");
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
             if (meta.hasEnchants()) {
@@ -347,7 +338,7 @@ public class ItemStackStorable implements Storable<ItemStack>, JsonSerializer<It
                         textao.append(",");
                     } else
                         first = false;
-                    textao.append(enchant.getKey().getId());
+                    textao.append(enchant.getKey().toString());
                     textao.append("-");
                     textao.append(enchant.getValue());
                 }

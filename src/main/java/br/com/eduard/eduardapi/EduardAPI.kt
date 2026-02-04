@@ -1,5 +1,6 @@
 package br.com.eduard.eduardapi
 
+import br.com.eduard.database.BukkitTypes
 import br.com.eduard.mine_utils.BukkitBungeeAPI
 import br.com.eduard.mine_utils.BukkitTimeHandler
 import br.com.eduard.java_utils.Copyable
@@ -7,23 +8,26 @@ import br.com.eduard.java_utils.Extra
 import br.com.eduard.mine_utils.Mine
 import br.com.eduard.mine_utils.MineReflect
 import br.com.eduard.mine_utils.VaultAPI
-import net.eduard.api.command.*
 import br.com.eduard.eduardapi.commands.api.ApiCommand
 import br.com.eduard.eduardapi.commands.map.MapCommand
 import br.com.eduard.eduardapi.commands.performance.PerformanceCommand
 import br.com.eduard.eduardapi.core.BukkitInfoGenerator
-import net.eduard.api.core.BukkitReplacers
-import net.eduard.api.core.PlayerSkin
-import net.eduard.api.hooks.JHCashHook
-import net.eduard.api.lib.abstraction.Hologram
+
 import br.com.eduard.mine_toolkit.bungee.BungeeAPI
 import br.com.eduard.mine_toolkit.bungee.ServerSpigot
 import br.com.eduard.mine_toolkit.config.Config
 import br.com.eduard.mine_toolkit.config.ConfigSection
-import net.eduard.api.lib.database.BukkitTypes
 import br.com.eduard.database.DBManager
-import net.eduard.api.lib.database.HybridTypes
+import br.com.eduard.database.HybridTypes
 import br.com.eduard.database.SQLManager
+import br.com.eduard.eduardapi.commands.EnchantCommand
+import br.com.eduard.eduardapi.commands.GotoCommand
+import br.com.eduard.eduardapi.commands.RunCommand
+import br.com.eduard.eduardapi.commands.SetSkinCommand
+import br.com.eduard.eduardapi.commands.SetXPCommand
+import br.com.eduard.eduardapi.commands.SoundCommand
+import br.com.eduard.eduardapi.core.BukkitReplacers
+import br.com.eduard.eduardapi.core.PlayerSkin
 import br.com.eduard.mine_toolkit.hybrid.BukkitServer
 import br.com.eduard.mine_toolkit.hybrid.Hybrid
 import br.com.eduard.mine_toolkit.kotlin.store
@@ -33,8 +37,6 @@ import br.com.eduard.mine_toolkit.menu.MenuButton
 import br.com.eduard.mine_toolkit.menu.Product
 import br.com.eduard.mine_toolkit.menu.Shop
 import br.com.eduard.mine_toolkit.menu.Slot
-import net.eduard.api.lib.menu.*
-import net.eduard.api.lib.modules.*
 import br.com.eduard.mine_toolkit.plugin.IPluginInstance
 import br.com.eduard.mine_toolkit.plugin.PluginSettings
 import br.com.eduard.mine_toolkit.score.DisplayBoard
@@ -44,15 +46,13 @@ import br.com.eduard.eduardapi.listeners.BukkitPlugins
 import br.com.eduard.eduardapi.listeners.EduWorldEditListener
 import br.com.eduard.eduardapi.listeners.EduardAPIListener
 import br.com.eduard.eduardapi.listeners.HooksListener
-import net.eduard.api.server.currency.CurrencyManager
-import net.eduard.api.server.minigame.MinigameSchematic
-import net.eduard.api.supports.CurrencyJHCash
-import net.eduard.api.supports.CurrencyVaultEconomy
-import net.eduard.api.task.AutoSaveAndBackupTask
-import net.eduard.api.task.DatabaseUpdaterTask
-import net.eduard.api.task.MenuAutoUpdaterTask
-import net.eduard.api.task.PlayerTargetPlayerTask
-import net.eduard.api.test.enableTests
+import br.com.eduard.eduardapi.server.minigame.MinigameSchematic
+import br.com.eduard.eduardapi.tasks.AutoSaveAndBackupTask
+import br.com.eduard.eduardapi.tasks.DatabaseUpdaterTask
+import br.com.eduard.eduardapi.tasks.MenuAutoUpdaterTask
+import br.com.eduard.eduardapi.tasks.PlayerTargetPlayerTask
+import br.com.eduard.mine_utils.game.Holographic
+
 import org.bukkit.Bukkit
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
@@ -60,6 +60,8 @@ import java.io.File
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.*
+import java.util.Locale
+import java.util.Locale.getDefault
 
 /**
  * Classe Principal do EduardAPI
@@ -160,7 +162,7 @@ class EduardAPI(private val plugin: JavaPlugin) : BukkitTimeHandler, IPluginInst
         if (!started) {
             this.onLoad()
         }
-        _root_ide_package_.br.com.eduard.eduardapi.server.minigame.MinigameSchematic.Companion.MAPS_FOLDER = File(instance.getPluginFolder(), "maps/")
+        MinigameSchematic.Companion.MAPS_FOLDER = File(instance.getPluginFolder(), "maps/")
         storage()
         VaultAPI.setupVault()
         BukkitBungeeAPI.register(plugin)
@@ -172,7 +174,7 @@ class EduardAPI(private val plugin: JavaPlugin) : BukkitTimeHandler, IPluginInst
         tasks()
         loadServers()
         log("§aCarregado com sucesso!")
-        enableTests()
+
     }
 
 
@@ -208,16 +210,15 @@ class EduardAPI(private val plugin: JavaPlugin) : BukkitTimeHandler, IPluginInst
         log("Base de dados de Enums do Bukkit gerado com sucesso")
 
         log("Carregando Moedas")
-        store<CurrencyJHCash>()
-        store<CurrencyVaultEconomy>()
-        CurrencyManager.register(CurrencyVaultEconomy())
-        JHCashHook()
+       // store<CurrencyJHCash>()
+        //store<CurrencyVaultEconomy>()
+       // CurrencyManager.register(CurrencyVaultEconomy())
+       // JHCashHook()
         log("Moedas carregadas")
 
         log("Ativando tasks (Timers)")
         // Na versão 1.16 precisa ser em Sync não pode ser Async
         PlayerTargetPlayerTask().asyncTimer()
-
         AutoSaveAndBackupTask().asyncTimer()
         databaseUpdaterThread = DatabaseUpdaterTask()
         databaseUpdaterThread.start()
@@ -254,7 +255,7 @@ class EduardAPI(private val plugin: JavaPlugin) : BukkitTimeHandler, IPluginInst
             log("Carregando infos dos servidores")
             sqlManager.createTable(ServerSpigot::class.java)
             for (server in sqlManager.getAll<ServerSpigot>()) {
-                BungeeAPI.servers[server.name.toLowerCase()] = server
+                BungeeAPI.servers[server.name.lowercase(getDefault())] = server
             }
         }
     }
@@ -271,7 +272,7 @@ class EduardAPI(private val plugin: JavaPlugin) : BukkitTimeHandler, IPluginInst
         Config.isDebug = configs.getBoolean("debug.config")
         ConfigSection.isDebug = configs.getBoolean("debug.config-section")
         Menu.isDebug = configs.getBoolean("debug.menu")
-        Hologram.debug = configs.getBoolean("debug.holograms")
+        //Holographic.debug = configs.getBoolean("debug.holograms")
         CommandManager.debugEnabled = configs.getBoolean("debug.commands")
         Copyable.setDebug(configs.getBoolean("debug.copyable"))
         BukkitBungeeAPI.setDebuging(configs.getBoolean("debug.bungee-bukkit"))
@@ -395,26 +396,16 @@ class EduardAPI(private val plugin: JavaPlugin) : BukkitTimeHandler, IPluginInst
             Hybrid.instance = BukkitServer
         }
         /*
-
         Som do rosnar do gato
         private val ROSNAR = SoundEffect.create("CAT_PURR")
-
         private val VALUE_TNT_POWER = 4f
-
         private val VALUE_CREEPER_POWER = 3f
-
         private val VALUE_WALKING_VELOCITY = -0.08f
-
         private val DAY_IN_HOUR = 24
-
         private val DAY_IN_MINUTES = DAY_IN_HOUR * 60
-
         private val DAY_IN_SECONDS = DAY_IN_MINUTES * 60
-
         private val DAY_IN_TICKS = (DAY_IN_SECONDS * 20).toLong()
-
         private val DAY_IN_MILLIS = DAY_IN_TICKS * 50
-
          */
         fun loadMaps() {
             MinigameSchematic.loadAll(MinigameSchematic.MAPS_FOLDER)

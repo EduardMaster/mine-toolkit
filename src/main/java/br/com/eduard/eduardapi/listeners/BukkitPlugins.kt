@@ -1,10 +1,10 @@
 package br.com.eduard.eduardapi.listeners
 
 import br.com.eduard.eduardapi.EduardAPI
-import net.eduard.api.core.Licence
+import br.com.eduard.eduardapi.core.Licence
+import br.com.eduard.eduardapi.server.EduardPlugin
 import br.com.eduard.mine_toolkit.config.Config
 import br.com.eduard.mine_toolkit.manager.EventsManager
-import net.eduard.api.server.EduardPlugin
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.server.PluginEnableEvent
@@ -29,7 +29,7 @@ class BukkitPlugins : EventsManager() {
         if (asyncCheck)
             Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, {
                 check(plugin, pluginName, owner, key)
-            }, 5)
+            } as Runnable, 5)
        else check(plugin, pluginName, owner, key)
     }
 
@@ -40,9 +40,9 @@ class BukkitPlugins : EventsManager() {
         if (!result.isActive) {
             Bukkit.getPluginManager().disablePlugin(plugin)
         } else {
-            Bukkit.getScheduler().runTask(plugin) {
+            Bukkit.getScheduler().runTask(plugin, Runnable {
                 plugin.onActivation()
-            }
+            })
         }
     }
 

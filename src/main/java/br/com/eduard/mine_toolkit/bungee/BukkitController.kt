@@ -22,7 +22,7 @@ class BukkitController : ServerController<Plugin> {
             // Não usar Bukkit.getServer().sendData()
             // porque essa porra envia 1 requisição para cada jogador online
             // isso significa se tiver 10 on , vai mandar essa Mensagem de bytes , 10 vezes no Bungeecord
-            online.sendPluginMessage(plugin, BungeeAPI.channel, arrayOut.toByteArray())
+            online.sendPluginMessage(plugin!!, BungeeAPI.channel, arrayOut.toByteArray())
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -43,7 +43,7 @@ class BukkitController : ServerController<Plugin> {
             out.writeUTF(tag)
             out.writeUTF(line)
             val online = firstPlayer ?: return
-            online.sendPluginMessage(plugin, BungeeAPI.channel, arrayOut.toByteArray())
+            online.sendPluginMessage(plugin!!, BungeeAPI.channel, arrayOut.toByteArray())
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -51,14 +51,14 @@ class BukkitController : ServerController<Plugin> {
 
     override fun register(pluginUsed: Plugin) {
         plugin = pluginUsed
-        Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, BungeeAPI.channel)
-        Bukkit.getMessenger().registerIncomingPluginChannel(plugin, BungeeAPI.channel, listener)
+        Bukkit.getMessenger().registerOutgoingPluginChannel(plugin!!, BungeeAPI.channel)
+        Bukkit.getMessenger().registerIncomingPluginChannel(plugin!!, BungeeAPI.channel, listener)
         BungeeAPI.debug("Registrando sistema no lado do Spigot(Servidor)")
     }
 
     override fun unregister() {
-        Bukkit.getMessenger().unregisterIncomingPluginChannel(plugin, BungeeAPI.channel, listener)
-        Bukkit.getMessenger().unregisterOutgoingPluginChannel(plugin, BungeeAPI.channel)
+        Bukkit.getMessenger().unregisterIncomingPluginChannel(plugin!!, BungeeAPI.channel, listener)
+        Bukkit.getMessenger().unregisterOutgoingPluginChannel(plugin!!, BungeeAPI.channel)
         BungeeAPI.debug("Desativando sistema no lado do Spigot(Servidor)")
     }
 

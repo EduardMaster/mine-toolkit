@@ -1,6 +1,6 @@
 package br.com.eduard.eduardapi;
 
-import br.com.eduard.eduardapi.LibraryLoader;
+import br.com.eduard.eduardapi.core.LibraryLoader;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;

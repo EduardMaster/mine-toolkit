@@ -1,8 +1,8 @@
 package br.com.eduard.eduardapi.tasks
 
 import br.com.eduard.eduardapi.EduardAPI
+import br.com.eduard.eduardapi.server.EduardPlugin
 import br.com.eduard.java_utils.Extra
-import net.eduard.api.server.EduardPlugin
 import org.bukkit.Bukkit
 
 class DatabaseUpdaterTask : Thread("EduardAPI Databases Updater") {

@@ -18,37 +18,28 @@ public class EnchantGlow extends EnchantmentWrapper {
 	private static Enchantment glow;
 
 	public EnchantGlow(){
-		super(250);
+		super("enchantment-glow");
 	}
-	public EnchantGlow(int id) {
-		super(id);
-	}
-
 
 	public boolean canEnchantItem(ItemStack item) {
 		return false;
 	}
 
-
 	public boolean conflictsWith(Enchantment other) {
 		return false;
 	}
-
 
 	public EnchantmentTarget getItemTarget() {
 		return null;
 	}
 
-
 	public int getMaxLevel() {
 		return 10;
 	}
 
-
 	public String getName() {
 		return "Glow";
 	}
-
 
 	public int getStartLevel() {
 		return 1;
@@ -68,7 +59,7 @@ public class EnchantGlow extends EnchantmentWrapper {
 		}
 
 		try {
-			glow = new EnchantGlow(255);
+			glow = new EnchantGlow();
 			Enchantment.registerEnchantment(glow);
 		}catch (Error err){
 			// pode falhar nas novas versões então adiciona Protection mesmo

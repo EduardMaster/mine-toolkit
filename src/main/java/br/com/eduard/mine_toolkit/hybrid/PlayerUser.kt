@@ -2,6 +2,8 @@ package br.com.eduard.mine_toolkit.hybrid
 
 import br.com.eduard.storage.api.annotations.StorageAttributes
 import java.util.*
+import java.util.Locale
+import java.util.Locale.getDefault
 import kotlin.ConcurrentModificationException
 
 @StorageAttributes(inline = true)
@@ -24,7 +26,7 @@ class PlayerUser(
             return  UUID.nameUUIDFromBytes(("OfflinePlayer:$name").toByteArray())
         }
         fun generateUUIDLowerCase(name: String): UUID {
-            return  UUID.nameUUIDFromBytes(("OfflinePlayer:${name.toLowerCase()}").toByteArray())
+            return  UUID.nameUUIDFromBytes(("OfflinePlayer:${name.lowercase(getDefault())}").toByteArray())
         }
         fun getUUIDOrCreate(name: String): UUID {
             var id: UUID? = null
@@ -92,7 +94,7 @@ class PlayerUser(
     }
 
     override fun hashCode(): Int {
-        return name.toLowerCase().hashCode()
+        return name.lowercase(getDefault()).hashCode()
     }
 
 

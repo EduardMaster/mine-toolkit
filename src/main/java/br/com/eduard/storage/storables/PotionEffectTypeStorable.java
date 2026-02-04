@@ -1,6 +1,7 @@
 package br.com.eduard.storage.storables;
 
 import br.com.eduard.storage.api.annotations.StorageAttributes;
+import org.bukkit.NamespacedKey;
 import org.bukkit.potion.PotionEffectType;
 
 import br.com.eduard.storage.api.Storable;
@@ -10,11 +11,11 @@ public class PotionEffectTypeStorable implements Storable<PotionEffectType> {
 
     public PotionEffectType restore(String string) {
         String[] split = string.split(";");
-        return PotionEffectType.getByName(split[0]);
+        return PotionEffectType.getByKey(NamespacedKey.fromString(split[0]));
     }
 
     public String store(PotionEffectType potionEffectType) {
-        return potionEffectType.getName() + ";" + potionEffectType.getId();
+        return potionEffectType.getKey() + ";" + potionEffectType.getName()+";"+potionEffectType.getId();
     }
 
 }

@@ -7,6 +7,8 @@ import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import java.util.*
+import java.util.Locale
+import java.util.Locale.getDefault
 
 object BukkitServer : IServer {
 
@@ -57,8 +59,8 @@ class BukkitPlayer(
     override val server: String
         get() = BukkitBungeeAPI.getCurrentServer()
     override fun playSound(soundName: String) {
-        val som = Sound.valueOf(soundName.toUpperCase())
-        instance?.playSound(instance?.location, som, 2f, 1f)
+        val som = Sound.valueOf(soundName.uppercase(getDefault()))
+        instance?.location?.let { instance?.playSound(it, som, 2f, 1f) }
     }
     override val isOnline: Boolean
         get() = instance?.isOnline ?: false
@@ -103,9 +105,7 @@ class BukkitPlayer(
     }
 
     override fun performCommand(command: String) {
-        if (instance != null) {
-            Bukkit.dispatchCommand(instance, command)
-        }
+        instance?.let { Bukkit.dispatchCommand(it, command) }
     }
 
     override fun chat(message: String) {

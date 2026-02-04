@@ -95,7 +95,7 @@ fun Player.mineChangeTabName(tabName: String) {
  * Atalho para Mine.changeTabName
  */
 fun Player.changeTabName(tabName: String) {
-    player.playerListName = Extra.cutText(tabName, 32)
+    player?.setPlayerListName(Extra.cutText(tabName, 32))
 }
 
 /**
@@ -110,7 +110,7 @@ fun Player.mineClearHotBar() {
  */
 fun Player.clearHotBar() {
     for (slot in 0..9) {
-        player.inventory.setItem(slot, null)
+        player?.inventory?.setItem(slot, null)
     }
 }
 
@@ -125,7 +125,7 @@ fun LivingEntity.mineClearArmors() {
  * Atalho para Mine.clearArmors
  */
 fun LivingEntity.clearArmors() {
-    equipment.armorContents = arrayOf()
+    equipment?.armorContents = arrayOf()
 }
 
 /**
@@ -140,7 +140,7 @@ fun Player.mineClearInventory() {
  */
 fun Player.clearInventory() {
     inventory.clear()
-    inventory.armorContents = arrayOf()
+    inventory.setArmorContents(arrayOf())
 }
 
 
@@ -194,7 +194,7 @@ fun Event.mineCallEvent() {
 fun Event.call() = mineCallEvent()
 
 
-inline val FakePlayer.offline get() = PlayerUser(name, id)
+inline val FakePlayer.offline get() = PlayerUser(name!!, id)
 inline val PlayerUser.fake get() = FakePlayer(name, uniqueId)
 inline val Player.fake get() = FakePlayer(this)
 inline val Player.offline get() = PlayerUser(this.name, this.uniqueId)
@@ -211,11 +211,11 @@ val <T> Class<T>.autoPlugin: JavaPlugin
 fun Inventory.setItem(line: Int, column: Int, item: ItemStack?) =
     this.setItem(Extra.getIndex(column, line), item)
 
-val BlockState.isCrop get() = type == Material.CROPS
+val BlockState.isCrop get() = type == Material.LEGACY_CROPS
 
 
 val BlockState.plantState: CropState?
-    get() = if (type == Material.CROPS) (this as Crops).state
+    get() = if (type == Material.LEGACY_CROPS) (this as Crops).state
     else null
 
 
@@ -230,7 +230,7 @@ val InventoryOpenEvent.opener get() = this.player as Player
 inline fun Player.openInventory(name: String, lineAmount: Int, block: Inventory.() -> Unit): Inventory {
     val inventory = Bukkit.createInventory(this, 9 * lineAmount, name.cut(32))
     block(inventory)
-    player.openInventory(inventory)
+    player?.openInventory(inventory)
     return inventory
 
 }
@@ -281,7 +281,7 @@ val Enchantment.nameBR get() = enchantmentsNames.getOrDefault(this, name)
 
 fun <T : ItemStack> T.displayEnchants(): T {
     val meta = itemMeta
-    val lore = meta.lore ?: mutableListOf<String>()
+    val lore = meta?.lore ?: mutableListOf<String>()
 
     val it = lore.iterator()
     while (it.hasNext()) {
@@ -290,7 +290,7 @@ fun <T : ItemStack> T.displayEnchants(): T {
             it.remove()
         }
     }
-    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
+    meta?.addItemFlags(ItemFlag.HIDE_ENCHANTS)
 
     for ((enchant, level) in enchantments) {
         if (level == 0) continue
@@ -298,7 +298,7 @@ fun <T : ItemStack> T.displayEnchants(): T {
         val name = enchant.nameBR
         lore.add("$enchantmentsPrefix§7$name §3$level")
     }
-    meta.lore = lore
+    meta?.lore = lore
     itemMeta = meta
 
     return this
@@ -358,7 +358,7 @@ fun CommandSender.isPlayer(action: Player.() -> Unit) {
     }
 }
 
-fun <T : ItemStack> T.addEnchant(ench: Enchantment?, level: Int): T {
+fun <T : ItemStack> T.addEnchant(ench: Enchantment, level: Int): T {
     addUnsafeEnchantment(ench, level)
     return this
 }

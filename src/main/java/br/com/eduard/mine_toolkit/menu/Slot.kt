@@ -14,13 +14,11 @@ open class Slot(
 ) : Serializable {
 
     var effects: EffectManager? = null
-
     constructor() : this(null, 1, 1)
     constructor(item: ItemStack?, index: Int) : this(item, 1, 1) {
         this.index = index
 
     }
-
     constructor(positionX: Int, positionY: Int, item: ItemStack?) : this(item, positionX, positionY)
 
     val slot: Int
@@ -33,7 +31,6 @@ open class Slot(
             positionY = Extra.getLine(index)
         }
 
-
     override fun equals(other: Any?): Boolean {
         if (other == null) return false
         if (other is Slot) {
@@ -45,7 +42,6 @@ open class Slot(
         }
         return false
     }
-
 
     fun setSlot(slot: Slot) {
         index = slot.index
