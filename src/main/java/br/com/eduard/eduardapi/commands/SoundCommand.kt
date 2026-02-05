@@ -39,7 +39,7 @@ class SoundCommand : CommandManager("sound","som") {
         val arg = args[0]
         var sound = Mine.getSound(arg)
         if (sound == null) {
-            sound = Sound.LEVEL_UP
+            sound = Sound.ENTITY_PLAYER_LEVELUP
         }
         var volume = 2f
         var pitch = 1f

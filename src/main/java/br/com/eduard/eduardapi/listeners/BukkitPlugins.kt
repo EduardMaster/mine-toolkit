@@ -2,9 +2,9 @@ package br.com.eduard.eduardapi.listeners
 
 import br.com.eduard.eduardapi.EduardAPI
 import br.com.eduard.eduardapi.core.Licence
-import br.com.eduard.eduardapi.server.EduardPlugin
 import br.com.eduard.mine_toolkit.config.Config
 import br.com.eduard.mine_toolkit.manager.EventsManager
+import br.com.eduard.mine_toolkit.plugin.EduardPlugin
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.server.PluginEnableEvent

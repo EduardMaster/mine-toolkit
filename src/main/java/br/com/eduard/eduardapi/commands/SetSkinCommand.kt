@@ -1,6 +1,6 @@
 package br.com.eduard.eduardapi.commands
 
-import net.eduard.api.core.PlayerSkin
+import br.com.eduard.eduardapi.core.PlayerSkin
 import br.com.eduard.mine_toolkit.manager.CommandManager
 import org.bukkit.entity.Player
 

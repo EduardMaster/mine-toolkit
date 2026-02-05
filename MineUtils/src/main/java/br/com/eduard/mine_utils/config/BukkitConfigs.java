@@ -1,9 +1,7 @@
 package br.com.eduard.mine_utils.config;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
+import com.google.common.base.Charsets;
+import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,11 +11,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.yaml.snakeyaml.reader.StreamReader;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -141,11 +137,10 @@ public class BukkitConfigs {
     public void reloadConfig() {
         file = new File(plugin.getDataFolder(), name);
         config = YamlConfiguration.loadConfiguration(file);
-        InputStream defaults = plugin.getResource(file.getName());
-        if (defaults != null) {
-            YamlConfiguration loadConfig = YamlConfiguration.loadConfiguration(defaults);
-            config.setDefaults(loadConfig);
-        }
+        InputStream defConfigStream = plugin.getResource(file.getName());
+        if (defConfigStream == null)return;
+        YamlConfiguration loadConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream, Charsets.UTF_8));
+        config.setDefaults(loadConfig);
     }
 
     /**
@@ -297,7 +292,8 @@ public class BukkitConfigs {
     @SuppressWarnings("deprecation")
     public void setItem(String path, ItemStack item) {
         ConfigurationSection section = getSection(path);
-        section.set("id", item.getTypeId());
+       // section.set("id", item.getTypeId());
+        section.set("type", item.getType().getKey());
         section.set("data", item.getDurability());
         if (item.hasItemMeta()) {
             ItemMeta meta = item.getItemMeta();
@@ -312,7 +308,7 @@ public class BukkitConfigs {
 
                 StringBuilder text = new StringBuilder();
                 for (Entry<Enchantment, Integer> enchant : item.getEnchantments().entrySet()) {
-                    text.append(enchant.getKey().getId()).append("-").append(enchant.getValue()).append(",");
+                    text.append(enchant.getKey()).append("-").append(enchant.getValue()).append(",");
                 }
                 section.set("enchants", text.toString());
             }
@@ -324,11 +320,12 @@ public class BukkitConfigs {
 
         ConfigurationSection section = getSection(path);
 
-        int id = section.getInt("id");
+        String typeStr= section.getString("type");
+        Material type = Material.getMaterial(typeStr);
         int amout = section.getInt("amount");
         int durability = section.getInt("durability");
         @SuppressWarnings("deprecation")
-        ItemStack item = new ItemStack(id, amout, (short) durability);
+        ItemStack item = new ItemStack(type, amout, (short) durability);
 
         ItemMeta meta = item.getItemMeta();
 
@@ -352,7 +349,7 @@ public class BukkitConfigs {
                     for (String enchantmentPart : encantamentosSplit) {
                         String[] enchInfo = enchantmentPart.split("-");
                         @SuppressWarnings("deprecation")
-                        Enchantment encantamento = Enchantment.getById(Integer.parseInt(enchInfo[0]));
+                        Enchantment encantamento = Enchantment.getByKey(NamespacedKey.fromString(enchInfo[0]));
                         int nivel = Integer.parseInt(enchInfo[1]);
                         item.addUnsafeEnchantment(encantamento, nivel);
                     }
@@ -363,7 +360,7 @@ public class BukkitConfigs {
                 try {
                     String[] enchInfo = enchants.split("-");
                     @SuppressWarnings("deprecation")
-                    Enchantment encantamento = Enchantment.getById(Integer.parseInt(enchInfo[0]));
+                    Enchantment encantamento = Enchantment.getByKey(NamespacedKey.fromString(enchInfo[0]));
                     int nivel = Integer.parseInt(enchInfo[1]);
                     item.addUnsafeEnchantment(encantamento, nivel);
                 } catch (Exception e) {

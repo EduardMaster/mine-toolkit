@@ -27,7 +27,7 @@ class GotoCommand : CommandManager("goto", "ir", "irpara") {
         val player = sender as Player
         if (Mine.existsWorld(sender, args[0])) {
             val world = Bukkit.getWorld(args[0])
-            Mine.teleport(player, world.spawnLocation)
+            Mine.teleport(player, world!!.spawnLocation)
             OPT_SOUND_TELEPORT.create(player)
             Mine.send(player, message.replace("\$world", world.name))
         }

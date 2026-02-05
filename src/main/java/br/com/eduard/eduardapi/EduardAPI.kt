@@ -46,11 +46,11 @@ import br.com.eduard.eduardapi.listeners.BukkitPlugins
 import br.com.eduard.eduardapi.listeners.EduWorldEditListener
 import br.com.eduard.eduardapi.listeners.EduardAPIListener
 import br.com.eduard.eduardapi.listeners.HooksListener
-import br.com.eduard.eduardapi.server.minigame.MinigameSchematic
 import br.com.eduard.eduardapi.tasks.AutoSaveAndBackupTask
 import br.com.eduard.eduardapi.tasks.DatabaseUpdaterTask
 import br.com.eduard.eduardapi.tasks.MenuAutoUpdaterTask
 import br.com.eduard.eduardapi.tasks.PlayerTargetPlayerTask
+import br.com.eduard.mine_toolkit.server.minigame.MinigameSchematic
 import br.com.eduard.mine_utils.game.Holographic
 
 import org.bukkit.Bukkit

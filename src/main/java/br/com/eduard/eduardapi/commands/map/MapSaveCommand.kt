@@ -1,10 +1,11 @@
 package br.com.eduard.eduardapi.commands.map
 
 import br.com.eduard.mine_toolkit.manager.CommandManager
-import net.eduard.api.server.minigame.MinigameSchematic
-import net.eduard.api.server.minigame.MinigameSchematic.Companion.isEditing
+import br.com.eduard.mine_toolkit.server.minigame.MinigameSchematic
 import org.bukkit.entity.Player
 import java.io.File
+import java.util.Locale
+import java.util.Locale.getDefault
 
 class MapSaveCommand : CommandManager("save", "salvar") {
     override fun playerCommand(player: Player, args: Array<String>) {
@@ -13,12 +14,12 @@ class MapSaveCommand : CommandManager("save", "salvar") {
             return
         }
 
-        if (!isEditing(player)) {
+        if (!MinigameSchematic.isEditing(player)) {
             player.sendMessage("§bEduardAPI §aPrimeiro copie um Mapa:§2 /map copy")
             return
         }
         val schema = MinigameSchematic.getSchematic(player)
-        schema.name = args[0].toLowerCase()
+        schema.name = args[0].lowercase(getDefault())
         schema.register()
         schema.save(File(MinigameSchematic.MAPS_FOLDER, schema.name + ".map"))
 

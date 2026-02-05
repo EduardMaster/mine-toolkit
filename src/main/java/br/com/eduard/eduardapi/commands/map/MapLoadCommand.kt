@@ -1,10 +1,12 @@
 package br.com.eduard.eduardapi.commands.map
 
 import br.com.eduard.mine_toolkit.manager.CommandManager
+import br.com.eduard.mine_toolkit.server.minigame.MinigameSchematic
 import br.com.eduard.mine_utils.Mine
-import net.eduard.api.server.minigame.MinigameSchematic
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import java.util.Locale
+import java.util.Locale.getDefault
 
 class MapLoadCommand : CommandManager("load", "carregar") {
     override fun command(sender: CommandSender, args: Array<String>) {
@@ -14,7 +16,7 @@ class MapLoadCommand : CommandManager("load", "carregar") {
         }
         if (Mine.onlyPlayer(sender)) {
             val player = sender as Player
-            val name = args[0].toLowerCase()
+            val name = args[0].lowercase(getDefault())
             if (MinigameSchematic.exists(name)) {
                 MinigameSchematic.loadToCache(player, name)
                 player.sendMessage("§bEduardAPI §aMapa carregado com sucesso!")

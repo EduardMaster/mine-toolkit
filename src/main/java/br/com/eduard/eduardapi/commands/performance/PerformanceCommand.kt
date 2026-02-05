@@ -8,10 +8,10 @@ class PerformanceCommand : CommandManager("performance", "desempenho","checklag"
     init {
         description = "Verifica Desempenho do Servidor e derivados"
         usage = "/desempenho "
-        register(_root_ide_package_.br.com.eduard.eduardapi.command.performance.PerformanceGarbageColectorCommand())
-        register(_root_ide_package_.br.com.eduard.eduardapi.command.performance.PerformanceCPUCommand())
-        register(_root_ide_package_.br.com.eduard.eduardapi.command.performance.PerformanceMemoryCommand())
-        register(_root_ide_package_.br.com.eduard.eduardapi.command.performance.PerformanceEntitiesCommand())
+        register(PerformanceGarbageColectorCommand())
+        register(PerformanceCPUCommand())
+        register(PerformanceMemoryCommand())
+        register(PerformanceEntitiesCommand())
     }
 
     override fun command(sender: CommandSender, args: Array<String>) {

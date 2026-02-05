@@ -101,14 +101,14 @@ public enum ItemCategory {
     public static Set<Material> getFarmTypes() {
         Set<Material> types = new HashSet<>();
         types.add(Material.NETHER_STAR);
-        types.add(Material.SEEDS);
+        types.add(Material.LEGACY_SEEDS);
         types.add(Material.STRING);
         types.add(Material.BLAZE_ROD);
         types.add(Material.GOLD_NUGGET);
         types.add(Material.CACTUS);
         types.add(Material.ROTTEN_FLESH);
         types.add(Material.BONE);
-        types.add(Material.RAW_BEEF);
+        types.add(Material.LEGACY_RAW_BEEF);
         types.add(Material.SLIME_BALL);
         types.add(Material.SLIME_BLOCK);
         types.add(Material.PRISMARINE_SHARD);
@@ -148,14 +148,14 @@ public enum ItemCategory {
         if (type == Material.ENCHANTED_BOOK) {
             return ENCHANTED_BOOK;
         }
-        if (type == Material.SKULL_ITEM) {
+        if (type == Material.LEGACY_SKULL_ITEM) {
             return ItemCategory.SKULL;
         }
         if (type == Material.POTION ||
                 type == Material.GLASS_BOTTLE) {
             return POTION;
         }
-        if (type == Material.MOB_SPAWNER) {
+        if (type == Material.LEGACY_MOB_SPAWNER) {
             return SPAWNER;
         }
         if (TOOLS.contains(type)) {

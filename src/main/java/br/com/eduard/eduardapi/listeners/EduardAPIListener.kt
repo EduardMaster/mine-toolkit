@@ -2,11 +2,11 @@ package br.com.eduard.eduardapi.listeners
 
 import br.com.eduard.eduardapi.EduardAPI
 import br.com.eduard.eduardapi.core.PlayerSkin
-import br.com.eduard.eduardapi.server.EduardPlugin
 import br.com.eduard.mine_toolkit.manager.EventsManager
 
 import br.com.eduard.mine_toolkit.event.BlockMineEvent
 import br.com.eduard.mine_toolkit.kotlin.mineCallEvent
+import br.com.eduard.mine_toolkit.plugin.EduardPlugin
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material

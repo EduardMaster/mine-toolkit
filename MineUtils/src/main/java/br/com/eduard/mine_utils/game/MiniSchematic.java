@@ -2,10 +2,12 @@ package br.com.eduard.mine_utils.game;
 
 import br.com.eduard.java_utils.Copyable;
 import br.com.eduard.mine_utils.Mine;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.util.Vector;
 
 import java.io.*;
@@ -32,8 +34,7 @@ final public class MiniSchematic {
 	private short height;
 	private short length;
 	private transient List<Chest> chests = new ArrayList<>();
-	private transient byte[] blocksId;
-	private transient byte[] blocksData;
+	private transient String[] blocksInfo;
 
 
 	 public short getWidth() {
@@ -102,8 +103,7 @@ final public class MiniSchematic {
 		height = (short) (highLoc.getBlockY() - lowLoc.getBlockY());
 		length = (short) (highLoc.getBlockZ() - lowLoc.getBlockZ());
 		int size = width * height * length;
-		this.blocksId = new byte[size];
-		this.blocksData = new byte[size];
+		this.blocksInfo = new String[size];
 		World worldUsed = relativeLocation.getWorld();
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
@@ -112,33 +112,14 @@ final public class MiniSchematic {
 					int index = getIndex(x, y, z, width, length);
 					Block block = worldUsed.getBlockAt(lowLoc.getBlockX() + x, lowLoc.getBlockY() + y,
 							lowLoc.getBlockZ() + z);
-					int id = block.getTypeId();
 					if (block.getState() instanceof Chest) {
 						Chest chest = (Chest) block.getState();
 						chests.add(chest);
-						
 					}
-					blocksId[index] = (byte) id;
-					blocksData[index] = block.getData();
+					blocksInfo[index] =block.getBlockData().getAsString();
 				}
 			}
 		}
-	}
-
-	public byte[] getBlocksId() {
-		return blocksId;
-	}
-
-	public void setBlocksId(byte[] blocksId) {
-		this.blocksId = blocksId;
-	}
-
-	public byte[] getBlocksData() {
-		return blocksData;
-	}
-
-	public void setBlocksData(byte[] blocksData) {
-		this.blocksData = blocksData;
 	}
 
 	public void paste(Location newRelative) {
@@ -161,27 +142,9 @@ final public class MiniSchematic {
 					Block block = worldUsed.getBlockAt(difX + low.getBlockX() + x, difY + low.getBlockY() + y,
 							difZ + low.getBlockZ() + z);
 					
-					byte typeId = blocksId[index];
-					byte typeData = blocksData[index];
-					if (typeId<0) {
-						typeId=0;
-					}
-					if (typeData<0) {
-						typeData=0;
-					}
-					if (minusLag) {
-						if (typeId == 0) {
-							continue;
-						}
-					}
-					if (block != null) {
-						if (block.getTypeId() != typeId || block.getData() != typeData)
-						{
+					String blockInfo = blocksInfo[index];
+					block.setBlockData(Bukkit.createBlockData(blockInfo));
 
-							block.setTypeIdAndData(typeId, typeData, false);
-						}
-					}
-					assert block != null;
 					if (block.getState() instanceof Chest) {
 						Chest chest = (Chest) block.getState();
 						chests.add(chest);
@@ -193,30 +156,33 @@ final public class MiniSchematic {
 
 	}
 
-	public void setType(byte id, byte data) {
-		for (int i = 0; i < blocksId.length; i++) {
-			blocksId[i] = id;
-			blocksData[i] = data;
+	public void setType(BlockData blockType ) {
+		for (int index = 0; index < blocksInfo.length; index++) {
+			blocksInfo[index] = blockType.getAsString();
 		}
 	}
 
+	/**
+	 * Precisa usar Sistema de Paleta de Armazenamento para gastar menos tempo processando
+	 * @param file
+	 */
 	public void save(File file) {
 		try {
 			file.getParentFile().mkdirs();
-			FileOutputStream s = new FileOutputStream(file);
-			DataOutputStream d = new DataOutputStream(new GZIPOutputStream(s));
-			d.writeShort(width);
-			d.writeShort(height);
-			d.writeShort(length);
-			d.writeInt(blocksId.length);
-			d.write(blocksId);
-			d.writeInt(blocksId.length);
-			d.write(blocksData);
-			d.writeUTF(Mine.serializeVector(low));
-			d.writeUTF(Mine.serializeVector(high));
-			d.writeUTF(Mine.serializeVector(relative));
-			d.flush();
-			d.close();
+			FileOutputStream fileWriting = new FileOutputStream(file);
+			DataOutputStream dataWriting = new DataOutputStream(new GZIPOutputStream(fileWriting));
+			dataWriting.writeShort(width);
+			dataWriting.writeShort(height);
+			dataWriting.writeShort(length);
+			dataWriting.writeInt(blocksInfo.length);
+			for (var blockDataString : blocksInfo){
+				dataWriting.writeUTF(blockDataString);
+			}
+			dataWriting.writeUTF(Mine.serializeVector(low));
+			dataWriting.writeUTF(Mine.serializeVector(high));
+			dataWriting.writeUTF(Mine.serializeVector(relative));
+			dataWriting.flush();
+			dataWriting.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -226,20 +192,15 @@ final public class MiniSchematic {
 		try {
 			FileInputStream s = new FileInputStream(file);
 			DataInputStream d = new DataInputStream(new GZIPInputStream(s));
-
-
 			this.width = d.readShort();
 			this.height = d.readShort();
 			this.length = d.readShort();
 			int size = d.readInt();
 
-			this.blocksId = new byte[size];
-			d.readFully(blocksId);
-
-			size = d.readInt();
-			this.blocksData = new byte[size];
-			d.readFully(blocksData);
-
+			this.blocksInfo = new String[size];
+			for(int index = 0; index < size;index++){
+				this.blocksInfo[index] = d.readUTF();
+			}
 			low = Mine.deserializeVector(d.readUTF());
 			high = Mine.deserializeVector(d.readUTF());
 			relative = Mine.deserializeVector(d.readUTF());

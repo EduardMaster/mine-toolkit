@@ -25,24 +25,27 @@ public abstract class CustomEnchant extends EnchantmentWrapper {
     private int startLevel = 1;
 
     public CustomEnchant() {
-        this(500);
+        this("custom_enchant");
     }
-    public CustomEnchant(int enchantID) {
-        super(enchantID);
-
+    public CustomEnchant(String enchantName ) {
+        super(enchantName);
+        this.name = enchantName;
     }
 
     public boolean unregister() {
         if (!isRegistred()) return false;
         try {
-            Field byIdField = Enchantment.class.getDeclaredField("byId");
+
             Field byNameField = Enchantment.class.getDeclaredField("byName");
-            byIdField.setAccessible(true);
             byNameField.setAccessible(true);
-            Map<?, ?> byId = (Map<?, ?>) byIdField.get(null);
             Map<?, ?> byName = (Map<?, ?>) byNameField.get(null);
-            byId.remove(getId());
             byName.remove(getName());
+
+            Field byIdField = Enchantment.class.getDeclaredField("byId");
+            byIdField.setAccessible(true);
+            Map<?, ?> byId = (Map<?, ?>) byIdField.get(null);
+           // byId.remove(getId());
+
             setRegistred(false);
             return true;
         } catch (Exception e) {
@@ -91,11 +94,6 @@ public abstract class CustomEnchant extends EnchantmentWrapper {
 
         return false;
 
-    }
-
-    public CustomEnchant(int id, String name) {
-        super(id);
-        this.name = name;
     }
 
 

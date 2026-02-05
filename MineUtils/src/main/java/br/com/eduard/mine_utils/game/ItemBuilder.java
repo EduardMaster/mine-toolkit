@@ -12,6 +12,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
 
@@ -55,7 +56,7 @@ public class ItemBuilder extends ItemStack {
     }
 
     public ItemBuilder spawnerType(EntityType type) {
-        type(Material.MOB_SPAWNER);
+        type(Material.LEGACY_MOB_SPAWNER);
         BlockStateMeta meta = (BlockStateMeta) getItemMeta();
         BlockState state = meta.getBlockState();
         if (state != null) {
@@ -80,26 +81,12 @@ public class ItemBuilder extends ItemStack {
         if (this.getType() != Material.POTION){
             setType(Material.POTION);
         }
-        int name = type.getDamageValue();
-        short damage;
-        if (type == PotionType.WATER) {
-            damage = 0;
-        } else {
-            if (type == null) {
-                damage = (short) (name == 0 ? 8192 : name);
-            } else {
-                damage = (short) (level - 1);
-                damage = (short) (damage << 5);
-                damage |= (short) type.getDamageValue();
-            }
-            if (splash) {
-                damage = (short) (damage | 16384);
-            }
-            if (extended) {
-                damage = (short) (damage | 64);
-            }
-            setDurability(damage);
+        if (splash){
+            setType(Material.SPLASH_POTION);
         }
+        var potionMeta = (PotionMeta) this.getItemMeta();
+        potionMeta.setBasePotionData(new PotionData(type));
+        setItemMeta(potionMeta);
         return this;
     }
 
@@ -125,7 +112,7 @@ public class ItemBuilder extends ItemStack {
 
 
     public ItemBuilder banner(DyeColor baseColor, DyeColor patternColor, PatternType patternType) {
-        type(Material.BANNER);
+        type(Material.LEGACY_BANNER);
         BannerMeta bannerMeta = (BannerMeta) getItemMeta();
         bannerMeta.setBaseColor(baseColor);
         bannerMeta.addPattern(new Pattern(patternColor, patternType));
@@ -134,7 +121,7 @@ public class ItemBuilder extends ItemStack {
     }
 
     public ItemBuilder addBanner(DyeColor patternColor, PatternType patternType) {
-        type(Material.BANNER);
+        type(Material.LEGACY_BANNER);
         BannerMeta bannerMeta = (BannerMeta) getItemMeta();
         bannerMeta.addPattern(new Pattern(patternColor, patternType));
         setItemMeta(bannerMeta);
@@ -149,7 +136,7 @@ public class ItemBuilder extends ItemStack {
 
     public ItemBuilder skull(String skullName) {
         try {
-            type(Material.SKULL_ITEM);
+            type(Material.LEGACY_SKULL_ITEM);
             data(SkullType.PLAYER.ordinal());
         }catch (Error ignored){
         }
@@ -163,7 +150,7 @@ public class ItemBuilder extends ItemStack {
 
     public ItemBuilder texture(String textureBase64) {
         try {
-            type(Material.SKULL_ITEM);
+            type(Material.LEGACY_SKULL_ITEM);
             data(SkullType.PLAYER.ordinal());
         }catch (Error ignored){
         }

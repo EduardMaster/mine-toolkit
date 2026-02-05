@@ -2150,7 +2150,7 @@ public final class Mine {
      * @return Banner como ItemStack
      */
     public static ItemStack newBanner() {
-        ItemStack banner = new ItemStack(Material.BANNER);
+        ItemStack banner = new ItemStack(Material.LEGACY_BANNER);
         BannerMeta meta = (BannerMeta) banner.getItemMeta();
         meta.setBaseColor(DyeColor.BLACK);
         meta.setDisplayName("§aBaner");
@@ -2234,7 +2234,7 @@ public final class Mine {
      * @return Um Firework normal
      */
     public static ItemStack newFirework() {
-        ItemStack fire = new ItemStack(Material.FIREWORK);
+        ItemStack fire = new ItemStack(Material.LEGACY_FIREWORK);
         FireworkMeta meta = (FireworkMeta) fire.getItemMeta();
         meta.clearEffects();
         fire.setItemMeta(meta);
@@ -2677,7 +2677,7 @@ public final class Mine {
      */
     public static CropState getPlantState(BlockState state) {
         Material type = state.getType();
-        if (type == Material.CROPS) {
+        if (type == Material.LEGACY_CROPS) {
             Crops crop = (Crops) state.getData();
             return crop.getState();
         }
@@ -2941,45 +2941,33 @@ public final class Mine {
 
     }
 
-    public static List<Location> setBox(Location playerLocation, double higher, double lower, double size,
-                                        Material wall, Material up, Material down, boolean clearInside) {
-        return setBox(playerLocation, higher, lower, size, new MaterialData(wall), new MaterialData(up), new MaterialData(down), clearInside
-        );
-
+    public static void setBox(Location playerLocation, double higher, double lower, double size, BlockData wall, BlockData up, BlockData down, boolean clearInside) {
+        Location high = getHighLocation(playerLocation.clone(), higher, size);
+        Location low = getLowLocation(playerLocation.clone(), lower, size);
+        Location min = getLowLocation(high, low);
+        Location max = getHighLocation(high, low);
+        List<Location> locations = new ArrayList<>();
+        for (double x = min.getX(); x <= max.getX(); x++) {
+            for (double y = min.getY(); y <= max.getY(); y++) {
+                for (double z = min.getZ(); z <= max.getZ(); z++) {
+                    Location loc = new Location(min.getWorld(), x, y, z);
+                    var isDown = y == (playerLocation.getBlockY() - lower);
+                    var isUp = y == (playerLocation.getBlockY() + higher);
+                    var isAtWall = x == (playerLocation.getBlockX() - size)||x == (playerLocation.getBlockX() + size)||z == (playerLocation.getBlockZ() - size)||z == (playerLocation.getBlockZ() + size);
+                    if (isDown){
+                        loc.getBlock().setBlockData(down);
+                    }else if (isUp){
+                        loc.getBlock().setBlockData(up);
+                    }else if (isAtWall){
+                        loc.getBlock().setBlockData(wall);
+                    }else if (clearInside){
+                        loc.getBlock().setType(Material.AIR);
+                    }
+                }
+            }
+        }
     }
 
-    public static List<Location> setBox(Location playerLocation, double higher, double lower, double size,
-                                        MaterialData wall, MaterialData up, MaterialData down, boolean clearInside) {
-        return getBox(playerLocation, higher, lower, size, location -> {
-
-            if (location.getBlockY() == playerLocation.getBlockY() + higher) {
-                location.getBlock().setType(up.getItemType());
-                location.getBlock().setData(up.getData());
-                return true;
-            }
-            if (location.getBlockY() == playerLocation.getBlockY() - lower) {
-                location.getBlock().setType(down.getItemType());
-                location.getBlock().setData(down.getData());
-                return true;
-            }
-
-            if (location.getBlockX() == playerLocation.getBlockX() + size
-                    || location.getBlockZ() == playerLocation.getBlockZ() + size
-                    || location.getBlockX() == playerLocation.getBlockX() - size
-                    || location.getBlockZ() == playerLocation.getBlockZ() - size) {
-                location.getBlock().setType(down.getItemType());
-                var data = location.getBlock().getBlockData();
-                location.getBlock().setData(down.getData());
-
-                return true;
-            }
-            if (clearInside) {
-                if (location.getBlock().getType() != Material.AIR)
-                    location.getBlock().setType(Material.AIR);
-            }
-            return false;
-        });
-    }
 
     /**
      * Modifica a Cor do Item (Usado somente para Itens de Couro)
@@ -3110,7 +3098,7 @@ public final class Mine {
      * @return Nome do Jogador
      */
     public static ItemStack setHead(ItemStack item, String name) {
-        item.setType(Material.SKULL_ITEM);
+        item.setType(Material.LEGACY_SKULL_ITEM);
         SkullMeta meta = (SkullMeta) item.getItemMeta();
         meta.setOwner(name);
         item.setItemMeta(meta);

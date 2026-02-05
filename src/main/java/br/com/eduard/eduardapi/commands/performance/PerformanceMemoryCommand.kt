@@ -8,8 +8,8 @@ class PerformanceMemoryCommand : CommandManager("memory", "ram", "men") {
     init {
         description = "Verifica o uso de Memoria RAM"
         usage = "/desempenho ram"
-        register(_root_ide_package_.br.com.eduard.eduardapi.command.performance.PerformanceGarbageColectorCommand())
-        register(_root_ide_package_.br.com.eduard.eduardapi.command.performance.PerformanceCPUCommand())
+        register(PerformanceGarbageColectorCommand())
+        register(PerformanceCPUCommand())
     }
 
     override fun command(sender: CommandSender, args: Array<String>) {

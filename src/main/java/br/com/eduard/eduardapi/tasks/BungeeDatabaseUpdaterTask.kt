@@ -1,8 +1,8 @@
 package br.com.eduard.eduardapi.tasks
 
 import br.com.eduard.eduardapi.EduardAPIBungee
-import br.com.eduard.eduardapi.server.EduardBungeePlugin
 import br.com.eduard.java_utils.Extra
+import br.com.eduard.mine_toolkit.plugin.EduardBungeePlugin
 import net.md_5.bungee.api.ProxyServer
 
 class BungeeDatabaseUpdaterTask : Runnable {
