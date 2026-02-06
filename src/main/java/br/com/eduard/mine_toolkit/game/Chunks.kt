@@ -17,7 +17,7 @@ class Chunks() {
     var x = 0
     var z = 0
     val chunk: Chunk
-        get() = Bukkit.getWorld(world).getChunkAt(x, z)
+        get() = Bukkit.getWorld(world)!!.getChunkAt(x, z)
 
     constructor(location: Location) : this(){
         x = location.chunk.x

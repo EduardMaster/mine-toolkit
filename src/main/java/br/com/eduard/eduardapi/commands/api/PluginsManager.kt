@@ -59,7 +59,7 @@ object PluginsManager {
         try {
             Bukkit.getServer().pluginManager.loadPlugin(pluginFile)
             targetPlugin = getPlugin(pluginName)
-            Bukkit.getServer().pluginManager.enablePlugin(targetPlugin)
+            Bukkit.getServer().pluginManager.enablePlugin(targetPlugin!!)
             return pre + green + getPlugin(pluginName) + " loaded " + msg + "and enabled!"
         } catch (e: UnknownDependencyException) {
             return pre + red + "File exists, but is missing a dependency!"

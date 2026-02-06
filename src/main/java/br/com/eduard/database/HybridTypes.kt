@@ -5,7 +5,7 @@ import java.util.*
 
 object HybridTypes {
 
-    init{
+    fun register() {
         customType<PlayerUser> {
             saveMethod={
                 "$name;$uniqueId"

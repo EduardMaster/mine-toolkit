@@ -1,4 +1,4 @@
-package br.com.eduard.mine_toolkit.server.minigame
+package br.com.eduard.mine_toolkit.minigame
 
 import br.com.eduard.mine_toolkit.config.Config
 import br.com.eduard.mine_toolkit.game.Kit
@@ -10,6 +10,7 @@ import br.com.eduard.mine_toolkit.score.DisplayBoard
 import br.com.eduard.storage.api.annotations.StorageIndex
 import java.io.File
 import java.util.*
+import java.util.Locale.getDefault
 
 /**
  * Modo do Minigame
@@ -23,7 +24,7 @@ open class MinigameMode() {
      var uuid = UUID.randomUUID()
 
     var name = "Normal"
-    val modeName get() = name.replace(" ","_").toLowerCase();
+    val modeName get() = name.replace(" ", "_").lowercase(getDefault());
     var timeIntoStart = 20
     var timeIntoRestart = 6
     var timeIntoGameOver = 10 * 60

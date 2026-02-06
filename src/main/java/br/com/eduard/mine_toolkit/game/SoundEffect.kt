@@ -2,11 +2,11 @@ package br.com.eduard.mine_toolkit.game
 
 import org.bukkit.Location
 import org.bukkit.Sound
-import org.bukkit.craftbukkit.v1_8_R3.CraftSound.getSound
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import java.lang.Error
 import java.lang.Exception
+import java.util.Locale.getDefault
 
 /**
  * Representa um Som sendo Tocado com um Volume e um Tom
@@ -24,7 +24,7 @@ class SoundEffect(
     constructor(sound: Sound, volume: Float) : this(sound, volume, 1f)
 
     fun create(location: Location): SoundEffect {
-        location.world.playSound(location, sound, volume, pitch)
+        location.world?.playSound(location, sound, volume, pitch)
         return this
     }
 
@@ -42,7 +42,7 @@ class SoundEffect(
     companion object {
         fun getSoundByName(name: String): Sound {
             return try {
-                Sound.valueOf(name.toUpperCase())
+                Sound.valueOf(name.uppercase(getDefault()))
             } catch (ex: Error) {
                 Sound.values()[0]
             } catch (ex: Exception) {

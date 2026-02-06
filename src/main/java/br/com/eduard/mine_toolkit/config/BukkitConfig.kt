@@ -64,8 +64,8 @@ class BukkitConfig(
         if (file.exists() && file.isFile) config = Mine.loadConfig(file)
         val defaults = plugin.getResource(file.name)
         if (defaults != null) {
-            val loadConfig = YamlConfiguration.loadConfiguration(defaults)
-            config.defaults = loadConfig
+            val loadConfig = YamlConfiguration.loadConfiguration(InputStreamReader(defaults))
+            config.setDefaults(loadConfig)
         }
 
     }
@@ -97,8 +97,8 @@ class BukkitConfig(
      * @return Pega uma mensagem
      */
     fun message(path: String): String {
-        return ChatColor.translateAlternateColorCodes('&',
-            config.getString(path))
+        val data = config.getString(path)?: ""
+        return ChatColor.translateAlternateColorCodes('&',data )
     }
 
     fun getMessages(path: String): List<String> {
@@ -204,7 +204,7 @@ class BukkitConfig(
         if (!config.isConfigurationSection(path)) {
             config.createSection(path)
         }
-        return config.getConfigurationSection(path)
+        return config.getConfigurationSection(path)!!
     }
     fun getDouble(path: String): Double {
         return config.getDouble(path, 0.0)
@@ -216,13 +216,13 @@ class BukkitConfig(
         return config.getIntegerList(path)
     }
     fun getItemStack(path: String): ItemStack {
-        return config.getItemStack(path)
+        return config.getItemStack(path)!!
     }
     fun getKeys(deep: Boolean): Set<String> {
         return config.getKeys(deep)
     }
     fun getList(path: String): List<*> {
-        return config.getList(path)
+        return config.getList(path)?: listOf<Any>()
     }
     fun getLong(path: String): Long {
         return config.getLong(path)
@@ -236,7 +236,7 @@ class BukkitConfig(
     }
 
     fun getString(path: String): String {
-        return config.getString(path)
+        return config.getString(path)?:""
     }
 
     fun getStringList(path: String): List<String> {

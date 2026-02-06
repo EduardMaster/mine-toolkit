@@ -1,4 +1,4 @@
-package br.com.eduard.mine_toolkit.server.minigame
+package br.com.eduard.mine_toolkit.minigame
 
 import org.bukkit.Location
 import org.bukkit.World
@@ -7,6 +7,7 @@ import br.com.eduard.java_utils.Copyable
 import br.com.eduard.storage.api.annotations.StorageIndex
 import org.bukkit.Bukkit
 import org.bukkit.util.Vector
+import kotlin.collections.iterator
 
 /**
  * Representa o Mapa da Sala do Minigame

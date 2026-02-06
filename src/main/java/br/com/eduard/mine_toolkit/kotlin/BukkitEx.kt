@@ -8,6 +8,8 @@ import br.com.eduard.java_utils.Extra
 import br.com.eduard.mine_utils.FakePlayer
 import br.com.eduard.mine_utils.Mine
 import br.com.eduard.mine_utils.MineReflect
+import net.md_5.bungee.api.ChatMessageType
+import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.*
 
 import org.bukkit.block.BlockState
@@ -147,27 +149,16 @@ fun Player.clearInventory() {
 /**
  * Atalho para MineReflect.sendTitle
  */
-@Deprecated("Aliases alterada", ReplaceWith("mineSendTitle(title, subTitle, 20, 20, 20)"))
-fun Player.sendTitle(title: String, subTitle: String) = mineSendTitle(title, subTitle, 20, 20, 20)
-
-
-fun Player.sendTitle(title: String, subTitle: String, fadeInt: Int, stay: Int, fadeOut: Int) {
-    return mineSendTitle(title, subTitle, fadeInt, stay, fadeOut);
-}
-
-
-/**
- * Atalho para MineReflect.sendTitle
- */
 fun Player.mineSendTitle(title: String, subTitle: String, fadeInt: Int, stay: Int, fadeOut: Int) {
     MineReflect.sendTitle(this, title, subTitle, fadeInt, stay, fadeOut)
 }
 
 /**
- * Atalho para MineReflect.sendActionBar
+ * Change Action Bar using Spigot Features (player.spigot())
  */
-@Deprecated("Aliases alterada", ReplaceWith("mineSendActionBar(msg)"))
-fun Player.sendActionBar(msg: String) = mineSendActionBar(msg)
+fun Player.sendActionBar(msg: String) {
+    this.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent(msg))
+}
 
 /**
  * Atalho para MineReflect.sendActionBar

@@ -1,6 +1,5 @@
-package br.com.eduard.mine_toolkit.server.minigame
+package br.com.eduard.mine_toolkit.minigame
 
-import net.eduard.api.lib.abstraction.Blocks
 import br.com.eduard.mine_toolkit.manager.TimeManager
 import br.com.eduard.java_utils.Copyable
 import br.com.eduard.mine_utils.Mine
@@ -8,12 +7,12 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.World
 import org.bukkit.block.Chest
-import org.bukkit.craftbukkit.v1_8_R3.CraftChunk
 import org.bukkit.entity.Player
 import org.bukkit.util.Vector
 import java.io.*
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
+import kotlin.collections.iterator
 
 /**
  * Schematic do WorldEdit Compacto
@@ -27,50 +26,13 @@ class MinigameSchematic(var name: String) {
         var data: Byte = 0
     }
 
-    /*
-    class SchematicLightFixer(val blocks: List<Blocks>) : TimeManager(1L) {
-        var ticks = 0
-        val it = blocks.iterator();
-
-        init {
-            log("Iniciando atualizacao de luzes desta colagem " + blocks.size)
-        }
-
-        override fun run() {
-            var current = 0
-            val start = System.currentTimeMillis()
-            while (it.hasNext() && current < 10000) {
-                val block = it.next();
-                block.fixLightning()
-                block.sendPacket()
-                current++
-            }
-            val end = System.currentTimeMillis()
-            val past = end - start
-            //log("Luzes Atualizando [$ticks] Tempo levado §f(${past}ms)")
-            ticks++
-            if (!it.hasNext()) {
-                log("Luzes da colagem arrumadas §f(${ticks}ticks)")
-                stopTask()
-                /*
-                for (block in blocks){
-                    block.sendPacket()
-                }
-
-                 */
-            }
-        }
-
-    }
-     */
-
     class SchematicPasting(
         val schematic: MinigameSchematic,
         val locationBase: Vector,
         val maxBlockReadPerTick: Int,
         val world: World
     ) : TimeManager(1L) {
-        var needUpdateLight: MutableList<Blocks> = ArrayList(schematic.size)
+
         var currentStage = 0
         var currentX = 0
         var currentY = 0
@@ -91,22 +53,6 @@ class MinigameSchematic(var name: String) {
         }
 
         fun fixLightning() {
-            val lightStart = System.currentTimeMillis();
-            log("Iniciando concerto de luzes")
-            var chunksUpdate = 0
-            val finalLoc = locationBase.clone()
-                .add(Vector(schematic.width.toInt(), schematic.height.toInt(), schematic.length.toInt()))
-            for (x in (locationBase.blockX shr 4) until (finalLoc.blockX shr 4)) {
-                for (z in (locationBase.blockZ shr 4) until (finalLoc.blockZ shr 4)) {
-                    val chunk = world.getChunkAt(x, z) as CraftChunk;
-                    val chunkNms = chunk.handle
-                   chunkNms.initLighting()
-                    chunksUpdate++
-                }
-            }
-            val lightEnd = System.currentTimeMillis();
-            val lightPast = lightEnd - lightStart
-            log("Finalizando concerto de luzes Chunks: $chunksUpdate §f${lightPast}ms ")
 
         }
 
@@ -150,6 +96,7 @@ class MinigameSchematic(var name: String) {
                     }
                     val blockInfo = schematic.blocks[index]
                     val typeID = blockInfo?.id?.toInt() ?: 0;
+                    /*
                     val typeData = blockInfo?.data?.toInt() ?: 0
                     val blockOf = Blocks.get(
                         locationBase.x.toInt() + currentX,
@@ -162,10 +109,9 @@ class MinigameSchematic(var name: String) {
                         nextBlock()
                         continue
                     }
-                    val hasChange = blockOf.setTypeAndData(Material.getMaterial(typeID), typeData)
-                    if (hasChange) {
-                        needUpdateLight.add(blockOf)
-                    }
+                    */
+                    //val hasChange = blockOf.setTypeAndData(Material.getMaterial(typeID), typeData)
+
                     nextBlock()
                     blocksChanged++
                     blocksRead++
@@ -324,7 +270,7 @@ class MinigameSchematic(var name: String) {
         for (x in 0 until width) {
             for (y in 0 until height) {
                 for (z in 0 until length) {
-                    val block = worldUsed.getBlockAt(startX + x, startY + y, startZ + z)
+                    val block = worldUsed!!.getBlockAt(startX + x, startY + y, startZ + z)
                     if (block.state is Chest) {
                         list.add(block.state as Chest)
                     }
@@ -336,7 +282,7 @@ class MinigameSchematic(var name: String) {
 
     fun copy(relativeLocation: Location) {
         val world = relativeLocation.world
-        copy(relativeLocation, low.toLocation(world), high.toLocation(world))
+        copy(relativeLocation, low.toLocation(world!!), high.toLocation(world))
     }
 
     fun copy(): MinigameSchematic {
@@ -380,9 +326,12 @@ class MinigameSchematic(var name: String) {
             for (z in 0 until length) {
                 for (x in 0 until width) {
                     count++
-                    val index = getIndex(x, y, z, width, length)
-                    val block = worldUsed.getBlockAt(lowX + x, lowY + y, lowZ + z)
 
+                    val index = getIndex(x, y, z, width, length)
+
+                    val block = worldUsed!!.getBlockAt(lowX + x, lowY + y, lowZ + z)
+
+                    /*
                     val id = block.typeId
                     if (id == 0) {
                         blocks[index] = null
@@ -392,6 +341,8 @@ class MinigameSchematic(var name: String) {
                     blockInfo.id = id.toShort()
                     blockInfo.data = block.data
                     blocks[index] = blockInfo
+                    */
+
 
                 }
             }
@@ -415,7 +366,7 @@ class MinigameSchematic(var name: String) {
         val pasteBase = Vector(low.blockX + difX  , low.blockY + difY , low.blockZ + difZ )
         end = System.currentTimeMillis()
         log("Iniciando Colagem do $name §f(${past}ms)")
-        val pasting = SchematicPasting(this, pasteBase, 100000, worldUsed)
+        val pasting = SchematicPasting(this, pasteBase, 100000, worldUsed!!)
 
         return pasting;
     }

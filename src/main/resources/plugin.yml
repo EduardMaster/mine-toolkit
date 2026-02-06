@@ -1,12 +1,15 @@
 name: "MineToolkit"
 description: "API de desenvolvimento de plugins que facilita sua vida"
 main: "br.com.eduard.eduardapi.EduardAPIMain"
-version: "2.1.0"
+version: "2.0.0"
 author: "Eduard"
 api-version: 1.18
 authors: [ "Eduard" ]
 softdepend: [ Multiverse-Core,Vault,PermissionEX,LegendChat,HolographicDisplays,Citizens,Essentials,JH_Shop ]
 website: "https://www.youtube.com/user/EduTutoriaisHD"
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib:2.3.0
+  - org.jetbrains.kotlin:kotlin-reflect:2.3.0
 commands:
   map:
     description: "Controla os Mapas criados (baseado no Schematic do WorldEdit)"

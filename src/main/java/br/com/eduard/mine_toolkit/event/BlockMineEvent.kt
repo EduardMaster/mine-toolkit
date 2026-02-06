@@ -1,6 +1,5 @@
 package br.com.eduard.mine_toolkit.event
 
-import net.eduard.api.lib.abstraction.Minecraft
 import br.com.eduard.mine_toolkit.kotlin.mineCallEvent
 import org.bukkit.Material
 import org.bukkit.block.Block
@@ -68,7 +67,7 @@ class BlockMineEvent(
     fun breakBlock() {
         //block.type = Material.AIR
         val chunk = block.chunk
-        Minecraft.instance.setBlock(block , chunk, Material.AIR, 0, false)
+        //Minecraft.instance.setBlock(block , chunk, Material.AIR, 0, false)
     }
 
     fun setDrop(item: ItemStack, amount: Double) {
@@ -224,9 +223,9 @@ class BlockMineEvent(
                     fortuneBlocks.add(MaterialData(type))
                 }
             }
-            fortuneBlocks.add(MaterialData(Material.NETHER_STALK))
+            fortuneBlocks.add(MaterialData(Material.LEGACY_NETHER_STALK))
             fortuneBlocks.add(MaterialData(Material.CACTUS))
-            fortuneBlocks.add(MaterialData(Material.SEEDS))
+            fortuneBlocks.add(MaterialData(Material.LEGACY_SEEDS))
             fortuneBlocks.add(MaterialData(Material.MELON_SEEDS))
             fortuneBlocks.add(MaterialData(Material.PUMPKIN_SEEDS))
             fortuneBlocks.add(MaterialData(Material.IRON_BLOCK))
@@ -234,15 +233,15 @@ class BlockMineEvent(
             fortuneBlocks.add(MaterialData(Material.LAPIS_BLOCK))
             fortuneBlocks.add(MaterialData(Material.DIAMOND_BLOCK))
             fortuneBlocks.add(MaterialData(Material.LAPIS_ORE))
-            fortuneBlocks.add(MaterialData(Material.POTATO_ITEM))
-            fortuneBlocks.add(MaterialData(Material.CARROT_ITEM))
+            fortuneBlocks.add(MaterialData(Material.LEGACY_POTATO_ITEM))
+            fortuneBlocks.add(MaterialData(Material.LEGACY_CARROT_ITEM))
             fortuneBlocks.add(MaterialData(Material.DIAMOND))
             fortuneBlocks.add(MaterialData(Material.GOLD_INGOT))
             fortuneBlocks.add(MaterialData(Material.EMERALD))
             // LAPIZ
-            fortuneBlocks.add(MaterialData(Material.INK_SACK, 4))
+            fortuneBlocks.add(MaterialData(Material.LAPIS_LAZULI))
             // COCOA BEANS
-            fortuneBlocks.add(MaterialData(Material.INK_SACK, 3))
+            fortuneBlocks.add(MaterialData(Material.COCOA_BEANS))
         }
 
 

@@ -2,7 +2,7 @@ package br.com.eduard.eduardapi.commands.map
 
 import br.com.eduard.mine_toolkit.kotlin.text
 import br.com.eduard.mine_toolkit.manager.CommandManager
-import br.com.eduard.mine_toolkit.server.minigame.MinigameSchematic
+import br.com.eduard.mine_toolkit.minigame.MinigameSchematic
 import org.bukkit.command.CommandSender
 import java.nio.file.Files
 

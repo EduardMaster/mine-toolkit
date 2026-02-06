@@ -1,6 +1,6 @@
 package br.com.eduard.eduardapi.commands.bungee
 
-import net.eduard.api.EduardAPIBungee
+import br.com.eduard.eduardapi.EduardAPIBungee
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.plugin.Command

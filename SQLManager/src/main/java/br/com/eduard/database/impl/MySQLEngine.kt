@@ -11,6 +11,8 @@ import java.lang.Exception
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.SQLException
+import java.util.Locale
+import java.util.Locale.getDefault
 
 class MySQLEngine(override val connection: Connection) : DatabaseEngine {
     override val tables: MutableMap<Class<*>, MySQLTable<*>> = mutableMapOf()
@@ -256,7 +258,8 @@ class MySQLEngine(override val connection: Connection) : DatabaseEngine {
         }
         if (column.isEnum) {
             try {
-                return column.javaType.getDeclaredField(data.toUpperCase()
+                return column.javaType.getDeclaredField(
+                    data.uppercase(getDefault())
                     .replace(" ","_"))[0]
             } catch (e: Exception) {
                 e.printStackTrace()

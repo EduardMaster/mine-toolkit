@@ -26,7 +26,7 @@ class Explosion(
     }
 
     fun create(location: Location): Explosion {
-        location.world.createExplosion(location.x, location.y, location.z, power, isMakeFire, isBreakBlocks)
+        location.world?.createExplosion(location.x, location.y, location.z, power, isMakeFire, isBreakBlocks)
         return this
     }
 }

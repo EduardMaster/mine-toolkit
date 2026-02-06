@@ -1,4 +1,4 @@
-package br.com.eduard.mine_toolkit.server.minigame
+package br.com.eduard.mine_toolkit.minigame
 
 /**
  * Estado do Jogador de um Minigame

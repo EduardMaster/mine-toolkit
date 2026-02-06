@@ -1,8 +1,8 @@
 package br.com.eduard.eduardapi.commands.api
 
 import br.com.eduard.mine_toolkit.manager.CommandManager
+import br.com.eduard.mine_toolkit.plugin.EduardPlugin
 import br.com.eduard.mine_utils.Mine
-import net.eduard.api.server.EduardPlugin
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender

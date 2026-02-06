@@ -2,7 +2,10 @@ package br.com.eduard.mine_toolkit.game
 
 import br.com.eduard.mine_toolkit.kotlin.mineSendTitle
 import br.com.eduard.java_utils.Copyable
+import br.com.eduard.mine_toolkit.kotlin.sendActionBar
 import br.com.eduard.mine_utils.Mine
+import org.bukkit.Bukkit
+import org.bukkit.entity.EnderDragon
 import org.bukkit.entity.Player
 
 /**
@@ -33,8 +36,9 @@ class Title(
         return Copyable.copyObject(this)
     }
 
-
     fun create(player: Player) {
+        player.sendTitle(Mine.getReplacers(title, player),Mine.getReplacers(subTitle, player),fadeIn,stay,fadeOut )
+        /*
         player.mineSendTitle(
             Mine.getReplacers(title, player),
             Mine.getReplacers(subTitle, player),
@@ -42,6 +46,6 @@ class Title(
             stay,
             fadeOut
         )
+        */
     }
-
 }

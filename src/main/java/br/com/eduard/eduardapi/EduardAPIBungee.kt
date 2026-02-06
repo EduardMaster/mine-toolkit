@@ -76,7 +76,7 @@ class EduardAPIBungee(val plugin: Plugin) : IPluginInstance {
     }
 
     fun onLoad() {
-        HybridTypes
+        HybridTypes.register()
         StorageAPI.setDebug(false)
         val currentInstance: EduardAPIBungee = this
         if (!currentInstance.started) {

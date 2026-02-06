@@ -1,11 +1,10 @@
 package br.com.eduard.eduardapi.commands.map
 
 import br.com.eduard.mine_toolkit.manager.CommandManager
-import br.com.eduard.mine_toolkit.server.minigame.MinigameSchematic
+import br.com.eduard.mine_toolkit.minigame.MinigameSchematic
 import br.com.eduard.mine_utils.Mine
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import java.util.Locale
 import java.util.Locale.getDefault
 
 class MapLoadCommand : CommandManager("load", "carregar") {

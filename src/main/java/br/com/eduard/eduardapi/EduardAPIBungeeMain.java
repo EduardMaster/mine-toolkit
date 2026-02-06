@@ -12,8 +12,8 @@ import java.io.File;
  */
 public class EduardAPIBungeeMain extends Plugin {
 
-    static{
-        new LibraryLoader(new File("libs/")).loadLibraries();
+    public EduardAPIBungeeMain() {
+        new LibraryLoader(getClass().getClassLoader(),new File("libs/")).loadLibraries();
     }
 
     public EduardAPIBungee eduardAPIBungee;

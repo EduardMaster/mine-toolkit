@@ -1,4 +1,4 @@
-package br.com.eduard.mine_toolkit.server.minigame
+package br.com.eduard.mine_toolkit.minigame
 
 import org.bukkit.Location
 import org.bukkit.entity.Player
@@ -13,7 +13,6 @@ import br.com.eduard.mine_utils.Mine
 import br.com.eduard.mine_toolkit.score.DisplayBoard
 import br.com.eduard.storage.api.annotations.StorageIndex
 import java.io.File
-import java.util.Locale
 import java.util.Locale.getDefault
 
 /**

@@ -1,10 +1,9 @@
 package br.com.eduard.eduardapi.commands.map
 
 import br.com.eduard.mine_toolkit.manager.CommandManager
-import br.com.eduard.mine_toolkit.server.minigame.MinigameSchematic
+import br.com.eduard.mine_toolkit.minigame.MinigameSchematic
 import org.bukkit.entity.Player
 import java.io.File
-import java.util.Locale
 import java.util.Locale.getDefault
 
 class MapSaveCommand : CommandManager("save", "salvar") {

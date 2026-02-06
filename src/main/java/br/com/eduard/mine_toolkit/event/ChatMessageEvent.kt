@@ -5,6 +5,8 @@ import org.bukkit.event.Cancellable
 import org.bukkit.event.HandlerList
 import org.bukkit.event.player.PlayerEvent
 import java.lang.Exception
+import java.util.Locale
+import java.util.Locale.getDefault
 
 class ChatMessageEvent(player: Player,
 val channeName: String,
@@ -39,7 +41,7 @@ var message: String) : PlayerEvent(player), Cancellable {
         for (i in format.indices) {
             if (format[i] == '{') {
                 try {
-                    val tag = format.substring(i + 1).split('}').toTypedArray()[0].toLowerCase()
+                    val tag = format.substring(i + 1).split('}').toTypedArray()[0].lowercase(getDefault())
                     if (!tags.containsKey(tag)) tags[tag] = ""
                 } catch (ex: Exception) {
                     ex.printStackTrace()
@@ -49,7 +51,7 @@ var message: String) : PlayerEvent(player), Cancellable {
         for (i in format.indices) {
             if (format[i] == '(') {
                 try {
-                    val tag = format.substring(i + 1).split(')').toTypedArray()[0].toLowerCase()
+                    val tag = format.substring(i + 1).split(')').toTypedArray()[0].lowercase(getDefault())
                     if (!tags.containsKey(tag)) tags[tag] = ""
                 } catch (ex: Exception) {
                     ex.printStackTrace()

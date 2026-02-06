@@ -1,4 +1,4 @@
-package br.com.eduard.mine_toolkit.server.minigame
+package br.com.eduard.mine_toolkit.minigame
 
 import br.com.eduard.mine_toolkit.kotlin.offline
 import br.com.eduard.mine_utils.FakePlayer
@@ -44,13 +44,13 @@ open class MinigamePlayer() {
     fun show(gamePlayer: MinigamePlayer) {
 
         //send("§aAgora você pode ver §2${gamePlayer.fakePlayer.name}")
-        this.player.showPlayer(gamePlayer.player)
+        this.player?.showPlayer(Mine.getMainPlugin(), gamePlayer.player!!)
     }
 
     fun hide(gamePlayer: MinigamePlayer) {
 
         //send("§cAgora você não pode ver §7${gamePlayer.fakePlayer.name}")
-        this.player.hidePlayer(gamePlayer.player)
+        this.player?.hidePlayer(Mine.getMainPlugin() , gamePlayer.player!!)
 
     }
 
@@ -114,7 +114,7 @@ open class MinigamePlayer() {
      * @param message Mensagem
      */
     fun send(message: String) {
-        player.sendMessage(Mine.getReplacers(message, player))
+        player?.sendMessage(Mine.getReplacers(message, player))
     }
 
     override fun hashCode(): Int {
@@ -203,7 +203,7 @@ open class MinigamePlayer() {
     }
 
     fun sendMessage(message: String) {
-        player.sendMessage(message)
+        player?.sendMessage(message)
     }
 
 }

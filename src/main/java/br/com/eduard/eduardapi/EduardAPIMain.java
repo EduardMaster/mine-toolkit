@@ -10,12 +10,12 @@ import java.io.File;
  * @author Eduard
  */
 public class EduardAPIMain extends JavaPlugin {
-    static {
-        new LibraryLoader(new File("libs/")).loadLibraries();
-    }
+
 
     public EduardAPI eduardAPI;
-
+    public EduardAPIMain() {
+        new LibraryLoader(getClassLoader(),new File("libs/")).loadLibraries();
+    }
 
     @Override
     public void onLoad() {

@@ -7,9 +7,9 @@ plugins {
 group = "br.com.eduard"
 version = "1.0-SNAPSHOT"
 
+java.sourceCompatibility = JavaVersion.VERSION_21
+java.targetCompatibility = JavaVersion.VERSION_21
 
-java.sourceCompatibility = JavaVersion.VERSION_25
-java.targetCompatibility = JavaVersion.VERSION_25
 
 publishing {
     publications {

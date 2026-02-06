@@ -5,7 +5,7 @@ import org.bukkit.Location
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 
-class VisualEffect(var type: Effect? = null, var data: Int = 0) {
+class VisualEffect(var type: Effect = Effect.CLICK1, var data: Int = 0) {
 
     constructor(type: Effect) : this(type,0)
 
@@ -13,8 +13,8 @@ class VisualEffect(var type: Effect? = null, var data: Int = 0) {
         return create(entity.location, radius)
 
     }
-    fun create(loc: Location, radius: Int = 10): VisualEffect {
-        loc.world.playEffect(loc, type, data, radius)
+    fun create(targetPlace: Location, radius: Int = 10): VisualEffect {
+        targetPlace.world?.playEffect(targetPlace, type, data, radius)
         return this
     }
 

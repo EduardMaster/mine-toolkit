@@ -50,8 +50,7 @@ import br.com.eduard.eduardapi.tasks.AutoSaveAndBackupTask
 import br.com.eduard.eduardapi.tasks.DatabaseUpdaterTask
 import br.com.eduard.eduardapi.tasks.MenuAutoUpdaterTask
 import br.com.eduard.eduardapi.tasks.PlayerTargetPlayerTask
-import br.com.eduard.mine_toolkit.server.minigame.MinigameSchematic
-import br.com.eduard.mine_utils.game.Holographic
+import br.com.eduard.mine_toolkit.minigame.MinigameSchematic
 
 import org.bukkit.Bukkit
 import org.bukkit.plugin.Plugin
@@ -59,7 +58,6 @@ import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-import java.util.*
 import java.util.Locale
 import java.util.Locale.getDefault
 
@@ -82,7 +80,7 @@ class EduardAPI(private val plugin: JavaPlugin) : BukkitTimeHandler, IPluginInst
     lateinit var sqlManager: SQLManager
     lateinit var databaseUpdaterThread : br.com.eduard.eduardapi.tasks.DatabaseUpdaterTask
     fun onLoad() {
-        HybridTypes
+        HybridTypes.register()
         StorageAPI.setDebug(false)
         instance = this
         val currentInstance: EduardAPI = this

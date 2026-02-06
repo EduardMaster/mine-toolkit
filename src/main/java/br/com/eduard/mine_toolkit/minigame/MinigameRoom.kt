@@ -1,4 +1,4 @@
-package br.com.eduard.mine_toolkit.server.minigame
+package br.com.eduard.mine_toolkit.minigame
 
 import br.com.eduard.database.annotations.ColumnPrimary
 import br.com.eduard.java_utils.Extra
@@ -138,7 +138,7 @@ open class MinigameRoom() {
 
     fun getPlayersOnline(state: MinigamePlayerState): List<Player> {
         return players.filter { p -> p.state == state && p.isOnline }
-            .map { it.player }
+            .map { it.player!! }
     }
 
     fun getPlayers(state: MinigamePlayerState): List<MinigamePlayer> {

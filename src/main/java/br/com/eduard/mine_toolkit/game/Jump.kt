@@ -56,7 +56,7 @@ class Jump {
                 }
             }
         }
-        entity.velocity = newVector
+        entity.velocity = newVector!!
         if (sound != null) {
             sound!!.create(entity)
         }

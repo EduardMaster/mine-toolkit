@@ -119,9 +119,9 @@ open class DisplayBoard(
     }
 
     fun create(): Scoreboard {
-        val score = Bukkit.getScoreboardManager().newScoreboard!!
+        val score = Bukkit.getScoreboardManager()!!.newScoreboard
         scoreboard = score
-        objective = score.registerNewObjective("displayBoard", "dummy")
+        objective = score.registerNewObjective("displayBoard", "dummy", this.title)
         for (position in 1..15) {
             linesTeams[position] = score.registerNewTeam("$teamPrefix$position")
         }

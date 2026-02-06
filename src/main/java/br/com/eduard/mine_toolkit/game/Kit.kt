@@ -1,8 +1,8 @@
 package br.com.eduard.mine_toolkit.game
 
+import br.com.eduard.mine_toolkit.minigame.MinigameMode
 import br.com.eduard.mine_utils.Mine
 import br.com.eduard.mine_utils.game.ItemBuilder
-import net.eduard.api.server.minigame.MinigameMode
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -116,7 +116,7 @@ class Kit() {
                 }
             }
         }
-        if (isFillSoup) Mine.fill(playerInventory, ItemStack(Material.MUSHROOM_SOUP))
+        if (isFillSoup) Mine.fill(playerInventory, ItemStack(Material.LEGACY_MUSHROOM_SOUP))
     }
 
     fun getUpgrade(level: Int) = upgrades.first {

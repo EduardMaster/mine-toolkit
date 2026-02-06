@@ -1,7 +1,7 @@
 package br.com.eduard.eduardapi.listeners
 
 import br.com.eduard.mine_toolkit.manager.EventsManager
-import br.com.eduard.mine_toolkit.server.minigame.MinigameSchematic
+import br.com.eduard.mine_toolkit.minigame.MinigameSchematic
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.event.EventHandler

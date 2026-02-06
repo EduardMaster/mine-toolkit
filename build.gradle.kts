@@ -1,16 +1,43 @@
 plugins {
     java
-    kotlin("jvm") version "2.1.10"//"2.3.0"//
+    kotlin("jvm") version "2.3.0"//"2.1.10"//
     `maven-publish`
+
    // id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 group = "br.com.eduard"
 version = "2.0"
 
-java.sourceCompatibility = JavaVersion.VERSION_25
-java.targetCompatibility = JavaVersion.VERSION_25
+java.sourceCompatibility = JavaVersion.VERSION_21
+java.targetCompatibility = JavaVersion.VERSION_21
 
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+/*
+tasks.withType<JavaCompile> {
+    // Usamos target/source em vez de .release para evitar o erro de módulos
+    sourceCompatibility = "23"
+    targetCompatibility = "23"
+    options.encoding = "UTF-8"
+}
+*/
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    }
+}
+
+/*
+tasks.withType<JavaCompile> {
+    options.release.set(21)
+    options.encoding = "UTF-8"
+}
+*/
 repositories {
     mavenCentral()
     mavenLocal()
@@ -22,8 +49,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.projectlombok:lombok:1.18.20")
-    annotationProcessor("org.projectlombok:lombok:1.18.20")
+    compileOnly( "org.projectlombok:lombok:1.18.34")
+    annotationProcessor ("org.projectlombok:lombok:1.18.34")
     compileOnly(kotlin("stdlib"))
     api(project(":JavaUtils"))
     api(project(":Storage"))
