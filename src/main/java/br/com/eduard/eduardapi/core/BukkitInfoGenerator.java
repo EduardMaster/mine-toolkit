@@ -5,10 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Objects;
 
-import lombok.val;
-import br.com.eduard.java_utils.Extra;
 import org.bukkit.*;
 import org.bukkit.World.Environment;
 import org.bukkit.entity.EntityType;
@@ -72,9 +69,10 @@ public class BukkitInfoGenerator {
                                 && name.startsWith("get") | name.startsWith("is") | name.startsWith("can")) {
                             method.setAccessible(true);
                             Object fieldValue = method.invoke(obj);
-                            if (fieldValue instanceof Keyed){
-                                var key = ((Keyed) fieldValue).getKey().toString();
+                            if (fieldValue instanceof NamespacedKey){
+                                var key = ((NamespacedKey) fieldValue).toString();
                                 section.add(method.getName(), key);
+                                continue;
                             }
                             if (fieldValue instanceof Class)
                                 continue;
@@ -90,28 +88,40 @@ public class BukkitInfoGenerator {
     }
 
 
-    private void saveEnum(Class<?> value, String... ignoredMethods) {
+    private void saveEnum(Class<?> classMaybeEnum, String... ignoredMethods) {
         try {
-            getPlugin().log("Saving Enum?: "+value);
-            if (!value.isEnum()){
-                getPlugin().log("Saving canceled cause is not Enum");
+
+            if (!classMaybeEnum.isEnum()){
+                getPlugin().log("Skipping not Enum: "+classMaybeEnum);
                 return;
             }
-            Config config = new Config(plugin, "database/" + value.getSimpleName() + ".yml");
+
+            Config config = new Config(plugin, "database/" + classMaybeEnum.getSimpleName() + ".yml");
             if (config.existConfig()){
-                getPlugin().log("Skipping this Enum cause already have generated infos!");
+                getPlugin().log("Skipping Enum already saved: "+classMaybeEnum);
                 return;
             }
+            getPlugin().log("Saving Enum: "+classMaybeEnum);
             boolean used = false;
-            for (Object part : value.getEnumConstants()) {
+            Field idField = null;
+
+            try {
+                idField = classMaybeEnum.getDeclaredField("id");
+                idField.setAccessible(true);
+            }catch (Exception ex){
+            }
+
+            for (Object part : classMaybeEnum.getEnumConstants()) {
                 try {
+
                     Enum<?> obj = (Enum<?>) part;
-                    ConfigSection section = config.add(obj.name(), obj.ordinal());
-                    if (obj.name().startsWith("LEGACY")) {
-                        // getPlugin().log("Ignorando Enum Legacy que não suporta mais ID: "+obj.name());
-                        continue;
+                    config.add(obj.name()+".ordinal", obj.ordinal());
+                    ConfigSection section = config.getSection(obj.name());
+                    if (idField !=null){
+                        int id = (int) idField.get(part);
+                        config.add(obj.name()+".id", id);
                     }
-                    inicial:
+                            inicial:
                     for (Method method : obj.getClass().getDeclaredMethods()) {
                         String name = method.getName();
                         if (Modifier.isStatic(method.getModifiers())) continue;
@@ -126,12 +136,17 @@ public class BukkitInfoGenerator {
 
                             try {
                                 method.setAccessible(true);
-                                Object test = method.invoke(obj);
-                                if (test == null)
+                                Object fieldValue = method.invoke(obj);
+                                if (fieldValue == null)
                                     continue;
-                                if (test instanceof Class)
+                                if (fieldValue instanceof NamespacedKey){
+                                    var key = ((NamespacedKey) fieldValue).toString();
+                                    section.add(method.getName(), key);
                                     continue;
-                                section.add(method.getName(), test);
+                                }
+                                if (fieldValue instanceof Class)
+                                    continue;
+                                section.add(method.getName(), fieldValue);
                                 used = true;
                             } catch (Exception ex) {
                                 //getPlugin().log("O metodo §c" + name + "§f causou erro! §f" + ex.getMessage());
