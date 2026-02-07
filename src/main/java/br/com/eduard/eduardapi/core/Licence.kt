@@ -5,7 +5,10 @@ import java.net.URL
 import java.util.*
 import java.util.Locale.getDefault
 
-
+/**
+ * Class for verification of plugin bought
+ * @since 1.7
+ */
 @SuppressWarnings("unused")
 object Licence {
     private const val DEBUG = true

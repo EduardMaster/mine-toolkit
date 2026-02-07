@@ -3,7 +3,7 @@ plugins {
     kotlin("jvm") version "2.3.0"//"2.1.10"//
     `maven-publish`
 
-   // id("com.github.johnrengelman.shadow") version "6.1.0"
+   // id("com.github.johnrengelman.shadow") version "8.1.1"//"6.1.0"
 }
 group = "br.com.eduard"
 version = "2.0"
@@ -11,7 +11,28 @@ version = "2.0"
 java.sourceCompatibility = JavaVersion.VERSION_21
 java.targetCompatibility = JavaVersion.VERSION_21
 
+tasks.jar {
+    archiveClassifier.set("all")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
+    val subprojectsToMerge = listOf(":JavaUtils", ":Storage", ":MineUtils", ":SQLManager")
+
+    subprojectsToMerge.forEach { path ->
+        val subproj = project(path)
+
+        // 1. Faz o JAR principal depender da criação do JAR do subprojeto
+        dependsOn("$path:jar")
+
+        // 2. Localiza o arquivo JAR gerado pelo subprojeto
+        val subJarFile = subproj.tasks.named<Jar>("jar").flatMap { it.archiveFile }
+
+        // 3. Extrai o conteúdo desse JAR e coloca dentro do JAR atual
+        from(subJarFile.map { zipTree(it) }) {
+            // Remove manifestos dos subprojetos para não sobrescrever o principal
+            exclude("META-INF/MANIFEST.MF", "META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
+        }
+    }
+}
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(21))
@@ -32,12 +53,6 @@ kotlin {
     }
 }
 
-/*
-tasks.withType<JavaCompile> {
-    options.release.set(21)
-    options.encoding = "UTF-8"
-}
-*/
 repositories {
     mavenCentral()
     mavenLocal()
