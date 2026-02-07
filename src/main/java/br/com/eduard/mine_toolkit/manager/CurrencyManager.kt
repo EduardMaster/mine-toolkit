@@ -1,6 +1,6 @@
 package br.com.eduard.mine_toolkit.manager
 
-import br.com.eduard.eduardapi.EduardAPI
+import br.com.eduard.mine_toolkit.MineToolkit
 import br.com.eduard.mine_toolkit.server.CurrencySystem
 import br.com.eduard.mine_utils.FakePlayer
 import br.com.eduard.storage.api.annotations.StorageAttributes
@@ -29,10 +29,10 @@ open class CurrencyManager : CurrencySystem {
         }
         fun register(currency: CurrencyManager) {
             var simpleCurrency = currency
-            EduardAPI.instance.configs.add("currency." + simpleCurrency.name, simpleCurrency)
-            EduardAPI.instance.configs.saveConfig()
-            simpleCurrency = EduardAPI.Companion.instance.configs["currency." + simpleCurrency.name, CurrencyManager::class.java]
-            EduardAPI.instance.log("§aMoeda registrada: §f" + simpleCurrency.name)
+            MineToolkit.instance.configs.add("currency." + simpleCurrency.name, simpleCurrency)
+            MineToolkit.instance.configs.saveConfig()
+            simpleCurrency = MineToolkit.Companion.instance.configs["currency." + simpleCurrency.name, CurrencyManager::class.java]
+            MineToolkit.instance.log("§aMoeda registrada: §f" + simpleCurrency.name)
             register(simpleCurrency.name, simpleCurrency)
             currenciesByPosition[simpleCurrency.position] = simpleCurrency
         }

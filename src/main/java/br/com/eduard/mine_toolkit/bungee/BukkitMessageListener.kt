@@ -1,6 +1,6 @@
 package br.com.eduard.mine_toolkit.bungee
 
-import br.com.eduard.eduardapi.EduardAPI
+import br.com.eduard.mine_toolkit.MineToolkit
 import java.io.ByteArrayInputStream
 import java.io.DataInputStream
 import java.io.ObjectInputStream
@@ -8,7 +8,6 @@ import org.bukkit.entity.Player
 import org.bukkit.plugin.messaging.PluginMessageListener
 import java.io.IOException
 import java.lang.ClassNotFoundException
-import java.util.Locale
 import java.util.Locale.getDefault
 
 class BukkitMessageListener(var bukkitController: BukkitController) : PluginMessageListener {
@@ -37,7 +36,7 @@ class BukkitMessageListener(var bukkitController: BukkitController) : PluginMess
         if (channel == BungeeAPI.channel) {
             val arrayIn = ByteArrayInputStream(message)
             val data = DataInputStream(arrayIn)
-            EduardAPI.instance.asyncTask{
+            MineToolkit.instance.asyncTask{
                 readMessage(arrayIn, data)
             }
         }

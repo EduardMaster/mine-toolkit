@@ -1,6 +1,6 @@
 package br.com.eduard.mine_toolkit.manager
 
-import br.com.eduard.eduardapi.EduardAPI
+import br.com.eduard.mine_toolkit.MineToolkit
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Projectile
 import org.bukkit.event.EventHandler
@@ -18,7 +18,7 @@ object DamagerManager : EventsManager() {
     private val lastHitTaken = mutableMapOf<Entity, Long>()
 
     init{
-        register(EduardAPI.instance)
+        register(MineToolkit.instance)
     }
     fun getLastDamageMoment(entity: Entity) : Long{
         return lastHitTaken.getOrElse(entity){0}

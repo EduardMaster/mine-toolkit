@@ -1,6 +1,6 @@
 package br.com.eduard.mine_toolkit.bungee
 
-import br.com.eduard.eduardapi.EduardAPIBungee
+import br.com.eduard.mine_toolkit.MineToolkitBungee
 import java.util.UUID
 import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.connection.ProxiedPlayer
@@ -50,7 +50,7 @@ class BungeeCooldown(var duration: Long = 1000) {
     inner class CooldownOverTask(val player : ProxiedPlayer) : Runnable {
         val startedAt = System.currentTimeMillis()
         val task =  ProxyServer.getInstance().scheduler.schedule(
-            EduardAPIBungee.instance.plugin, this, duration,
+            MineToolkitBungee.instance.plugin, this, duration,
             duration , TimeUnit.MILLISECONDS)
 
         fun stop(){

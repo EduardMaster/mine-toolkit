@@ -1,7 +1,7 @@
-name: "EduardAPI"
-description: "API de desenvolvimento de plugins que facilita sua vida"
-main: "br.com.eduard.eduardapi.EduardAPIBungeeMain"
-version: "1.7.7"
+name: "MineToolkit"
+description: "A powerful toolkit designed to speed up the creation of plugins by providing a solid foundation of essential utilities and automated systems."
+main: "br.com.eduard.mine_toolkit.MineToolkitBungeeMain"
+version: "2.0.0"
 author: "Eduard"
 authors: ["Eduard"]
 website: "https://www.youtube.com/user/EduTutoriaisHD"

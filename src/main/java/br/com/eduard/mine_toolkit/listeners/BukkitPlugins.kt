@@ -1,0 +1,49 @@
+package br.com.eduard.mine_toolkit.listeners
+
+import br.com.eduard.mine_toolkit.MineToolkit
+import br.com.eduard.mine_toolkit.core.Licence
+import br.com.eduard.mine_toolkit.config.Config
+import br.com.eduard.mine_toolkit.manager.EventsManager
+import br.com.eduard.mine_toolkit.plugin.EduardPlugin
+import org.bukkit.Bukkit
+import org.bukkit.event.EventHandler
+import org.bukkit.event.server.PluginEnableEvent
+
+class BukkitPlugins : EventsManager() {
+
+    @EventHandler
+    fun onPluginActive(e: PluginEnableEvent) {
+        if (e.plugin !is EduardPlugin) return
+        val plugin = (e.plugin as EduardPlugin)
+        if (plugin.isFree) return
+        val pluginName = plugin.name
+        val tag = "§b[" + plugin.name + "]§f"
+        Bukkit.getConsoleSender().sendMessage("$tag Verificando licenca do Plugin no site")
+        val config = Config(plugin, "license.yml")
+        config.add("key", "INSIRA_KEY")
+        config.add("owner", "INSIRA_Dono")
+        config.saveConfig()
+        val key = config.getString("key")
+        val owner = config.getString("owner")
+        val asyncCheck = MineToolkit.instance.configs.getBoolean("async-license-check")
+        if (asyncCheck)
+            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, {
+                check(plugin, pluginName, owner, key)
+            } as Runnable, 5)
+       else check(plugin, pluginName, owner, key)
+    }
+
+    fun check(plugin : EduardPlugin, pluginName: String, owner: String, key: String) {
+        val tag = "§b[$pluginName]§f"
+        val result = Licence.test(pluginName, owner, key);
+        Bukkit.getConsoleSender().sendMessage(tag + result.message)
+        if (!result.isActive) {
+            Bukkit.getPluginManager().disablePlugin(plugin)
+        } else {
+            Bukkit.getScheduler().runTask(plugin, Runnable {
+                plugin.onActivation()
+            })
+        }
+    }
+
+}
