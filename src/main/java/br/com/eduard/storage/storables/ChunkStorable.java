@@ -1,11 +1,11 @@
 package br.com.eduard.storage.storables;
 
-import br.com.eduard.storage.api.annotations.StorageAttributes;
+import br.com.eduard.storage.annotations.StorageAttributes;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 
 import br.com.eduard.java_utils.Extra;
-import br.com.eduard.storage.api.Storable;
+import br.com.eduard.storage.Storable;
 
 @StorageAttributes(inline = true)
 public class ChunkStorable implements Storable<Chunk> {

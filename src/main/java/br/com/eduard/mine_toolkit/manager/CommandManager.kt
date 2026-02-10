@@ -2,19 +2,30 @@ package br.com.eduard.mine_toolkit.manager
 
 import br.com.eduard.mine_toolkit.kotlin.formatColors
 import br.com.eduard.java_utils.Extra
-import br.com.eduard.mine_toolkit.server.CurrencySystem
-import br.com.eduard.mine_utils.FakePlayer
 import br.com.eduard.mine_utils.Mine
 import org.bukkit.Bukkit
-import org.bukkit.Material
 import org.bukkit.command.*
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
 import java.util.Locale.getDefault
 
+/**
+ * A robust and hierarchical command management system for Bukkit/Spigot plugins.
+ *
+ * This class facilitates the creation of complex command structures by providing:
+ * - **Sub-command Nesting:** Easily register and manage child commands through a recursive hierarchy.
+ * - **Dynamic Registration:** Register commands at runtime without needing manual entries in `plugin.yml`.
+ * - **Automated Permissions & Usage:** Generates nodes like `command.name.subname` and usage messages automatically.
+ * - **Integrated Tab-Completion:** Smart, permission-aware suggestions for all command levels.
+ * - **Simplified Logic:** Separates Player-only execution from generic console commands.
+ *
+ * @property name The primary name of the command.
+ * @param aliases Optional aliases that can be used to trigger the command.
+ * @author Eduard
+ * @since 1.0
+ */
 open class CommandManager(var name: String, vararg aliases: String) : EventsManager(), TabCompleter, CommandExecutor {
 
     @Transient
@@ -331,7 +342,7 @@ open class CommandManager(var name: String, vararg aliases: String) : EventsMana
                 val simpleCommandMap = getServerCommandsMap()
                 val field = SimpleCommandMap::class.java.getDeclaredField("knownCommands")
                 field.isAccessible = true
-                return field.get(simpleCommandMap) as MutableMap<String, Command>
+                return field.get(simpleCommandMap) as MutableMap<String, Command>?
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
@@ -359,7 +370,15 @@ open class CommandManager(var name: String, vararg aliases: String) : EventsMana
 
 
     /**
-     * Classe para registrar Comando sem a plugin.yml parecido com PluginCommand
+     * A custom implementation of Bukkit's [Command] that allows for dynamic registration.
+     * * This class acts as a bridge, enabling commands to function similarly to a `PluginCommand`
+     * without requiring an entry in the `plugin.yml` file. It handles:
+     * - **State Validation:** Checks if the parent plugin is still enabled before execution.
+     * - **Permission Enforcement:** Automatically validates permissions before calling the [CommandManager] logic.
+     * - **Error Handling:** Provides a safety net to catch exceptions during execution and notify the sender.
+     * - **Tab-Completion Proxy:** Redirects tab-completion requests to the [CommandManager] hierarchy.
+     *
+     * @property command The [CommandManager] instance that contains the actual command logic.
      */
     class CustomCommand(val command: CommandManager) : Command(command.name) {
         override fun execute(sender: CommandSender, label: String, args: Array<String>): Boolean {

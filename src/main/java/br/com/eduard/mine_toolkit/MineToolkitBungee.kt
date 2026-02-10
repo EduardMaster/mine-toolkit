@@ -29,7 +29,7 @@ import kotlin.concurrent.thread
 
 
 @Suppress("deprecated")
-class MineToolkitBungee(val plugin: Plugin) : IPluginInstance {
+class MineToolkitBungee(private val plugin: Plugin) : IPluginInstance<Plugin> {
 
     companion object {
         lateinit var instance: MineToolkitBungee
@@ -236,7 +236,7 @@ class MineToolkitBungee(val plugin: Plugin) : IPluginInstance {
 
     }
 
-    override fun getPlugin(): Any {
+    override fun getPlugin(): Plugin {
         return plugin
     }
 

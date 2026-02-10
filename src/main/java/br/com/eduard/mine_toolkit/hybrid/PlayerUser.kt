@@ -1,6 +1,6 @@
 package br.com.eduard.mine_toolkit.hybrid
 
-import br.com.eduard.storage.api.annotations.StorageAttributes
+import br.com.eduard.storage.annotations.StorageAttributes
 import java.util.*
 import java.util.Locale
 import java.util.Locale.getDefault

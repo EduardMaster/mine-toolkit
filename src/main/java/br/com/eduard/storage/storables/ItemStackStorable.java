@@ -23,7 +23,7 @@ import com.mojang.authlib.properties.Property;
 import br.com.eduard.mine_utils.Mine;
 import br.com.eduard.mine_utils.game.EnchantGlow;
 import br.com.eduard.java_utils.Extra;
-import br.com.eduard.storage.api.Storable;
+import br.com.eduard.storage.Storable;
 
 
 public class ItemStackStorable implements Storable<ItemStack>, JsonSerializer<ItemStack>, JsonDeserializer<ItemStack> {

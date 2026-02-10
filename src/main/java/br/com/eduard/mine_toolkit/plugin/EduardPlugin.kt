@@ -32,7 +32,7 @@ import java.util.zip.ZipOutputStream
  * @version 1.0
  * @since 2.0
  */
-open class EduardPlugin : JavaPlugin(), BukkitTimeHandler, IPlugin {
+open class EduardPlugin : JavaPlugin(), BukkitTimeHandler, IPluginInstance<JavaPlugin> {
     fun getString(key: String) = configs.getString(key)
     fun message(key: String) = messages.message(key)
     fun getInt(key: String) = configs.getInt(key)
@@ -124,7 +124,7 @@ open class EduardPlugin : JavaPlugin(), BukkitTimeHandler, IPlugin {
             currentInstance.configs.add("database", currentInstance.dbManager)
             currentInstance.configs.saveConfig()
             currentInstance.settings = currentInstance.configs.get("settings", PluginSettings::class.java)
-            currentInstance.dbManager = currentInstance.configs.get("database", DBManager::class.java)
+            currentInstance.dbManager = currentInstance.configs.getData<DBManager>("database")
             currentInstance.sqlManager = SQLManager(currentInstance.dbManager)
             //  currentInstance.setStorageManager(new StorageManager(currentInstance.getSqlManager()));
             currentInstance.started = true

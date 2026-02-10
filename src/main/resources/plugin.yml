@@ -17,7 +17,7 @@ commands:
     usage: "/<command> help"
   api:
     description: "Controla plugins feitos pelo Edu"
-    aliases: [ eduardapi,eduard,e ]
+    aliases: [ eduardapi,eduard, minetoolkit ]
     usage: "/<command> help"
 
 

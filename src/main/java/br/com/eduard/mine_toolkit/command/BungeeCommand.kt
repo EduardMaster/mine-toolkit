@@ -11,11 +11,11 @@ import net.md_5.bungee.api.plugin.Plugin
 class BungeeCommand(val command: br.com.eduard.mine_toolkit.command.Command)
     : Command(command.name, null, *command.aliases.toTypedArray()) , HybridCommand  {
 
-    override fun register(plugin : IPluginInstance){
+    override fun register(plugin : IPluginInstance<*>){
         register(plugin.plugin as Plugin)
     }
 
-    override fun unregister(plugin: IPluginInstance) {
+    override fun unregister(plugin: IPluginInstance<*>) {
 
     }
 

@@ -1,8 +1,8 @@
 package br.com.eduard.mine_toolkit.config
 
 import br.com.eduard.java_utils.Extra
-import br.com.eduard.mine_toolkit.plugin.IPlugin
 import br.com.eduard.mine_toolkit.hybrid.Hybrid
+import br.com.eduard.mine_toolkit.plugin.IPluginInstance
 import java.io.File
 import java.lang.Exception
 
@@ -37,9 +37,9 @@ class Config(
         }
     }
 
-    constructor(plugin: IPlugin, name: String) : this(plugin.pluginFolder, name, plugin, true)
+    constructor(plugin: IPluginInstance<*>, name: String) : this(plugin.pluginFolder, name, plugin, true)
     constructor(plugin: Any, name: String) : this(plugin.autoFolder, name, plugin, true)
-    constructor(plugin: IPlugin, name: String, reloadOnStart: Boolean) : this(
+    constructor(plugin: IPluginInstance<*>, name: String, reloadOnStart: Boolean) : this(
         plugin.pluginFolder,
         name,
         plugin,
@@ -155,19 +155,27 @@ class Config(
         }
     }
 
-    operator fun <E> get(clazz: Class<E>?): E {
+    operator fun <E> get(clazz: Class<E>): E {
         return config["", clazz]
     }
 
-    operator fun <E> get(path: String, clazz: Class<E>?): E {
+    inline fun <reified E> getData() : E{
+        return this[E::class.java]
+    }
+
+    inline fun <reified E> getData(path: String) : E{
+        return this.get(path ,E::class.java )
+    }
+
+    operator fun <E> get(path: String, clazz: Class<E>): E {
         return config[path, clazz]
     }
 
-    fun add(path: String, value: Any?): ConfigSection {
+    fun add(path: String, value: Any): ConfigSection {
         return config.add(path, value, *arrayOf())
     }
 
-    fun add(path: String, value: Any?, vararg comments: String): ConfigSection {
+    fun add(path: String, value: Any, vararg comments: String): ConfigSection {
         return config.add(path, value, *comments)
     }
 

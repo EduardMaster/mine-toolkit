@@ -7,7 +7,7 @@ import br.com.eduard.mine_toolkit.kotlin.reloadListFromFolder
 import br.com.eduard.mine_toolkit.kotlin.save
 import br.com.eduard.mine_toolkit.kotlin.saveListInFolder
 import br.com.eduard.mine_toolkit.score.DisplayBoard
-import br.com.eduard.storage.api.annotations.StorageIndex
+import br.com.eduard.storage.annotations.StorageIndex
 import java.io.File
 import java.util.*
 import java.util.Locale.getDefault

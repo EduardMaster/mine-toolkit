@@ -5,7 +5,7 @@ import br.com.eduard.storage.StorageAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
-import br.com.eduard.storage.api.Storable;
+import br.com.eduard.storage.Storable;
 
 import java.lang.reflect.Type;
 import java.util.Map;

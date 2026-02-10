@@ -68,7 +68,7 @@ import java.util.Locale.getDefault
  * @version 1.3
  * @since 0.5
  */
-class MineToolkit(private val plugin: JavaPlugin) : BukkitTimeHandler, IPluginInstance {
+class MineToolkit(private val plugin: JavaPlugin) : BukkitTimeHandler, IPluginInstance<JavaPlugin> {
     fun getString(key: String) = configs.getString(key)
     fun message(key: String) = messages.message(key)
     var started = false
@@ -342,7 +342,7 @@ class MineToolkit(private val plugin: JavaPlugin) : BukkitTimeHandler, IPluginIn
         unregisterListeners()
         unregisterServices()
         MinigameSchematic.unloadAll()
-        sqlManager.dbManager.closeConnection()
+        sqlManager.databaseAccessor.closeConnection()
         databaseUpdaterThread.interrupt()
     }
 
@@ -370,7 +370,7 @@ class MineToolkit(private val plugin: JavaPlugin) : BukkitTimeHandler, IPluginIn
     }
 
 
-    override fun getPlugin(): Plugin {
+    override fun getPlugin(): JavaPlugin {
         return this.plugin
     }
 

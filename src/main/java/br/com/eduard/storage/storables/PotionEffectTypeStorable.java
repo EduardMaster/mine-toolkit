@@ -1,10 +1,10 @@
 package br.com.eduard.storage.storables;
 
-import br.com.eduard.storage.api.annotations.StorageAttributes;
+import br.com.eduard.storage.annotations.StorageAttributes;
 import org.bukkit.NamespacedKey;
 import org.bukkit.potion.PotionEffectType;
 
-import br.com.eduard.storage.api.Storable;
+import br.com.eduard.storage.Storable;
 
 @StorageAttributes(inline = true)
 public class PotionEffectTypeStorable implements Storable<PotionEffectType> {

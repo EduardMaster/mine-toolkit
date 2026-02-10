@@ -1,6 +1,6 @@
 package br.com.eduard.mine_toolkit.game
 
-import br.com.eduard.storage.api.annotations.StorageAttributes
+import br.com.eduard.storage.annotations.StorageAttributes
 
 
 @StorageAttributes(inline = true)

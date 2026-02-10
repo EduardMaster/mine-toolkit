@@ -4,11 +4,11 @@ import java.lang.reflect.Type;
 import java.util.UUID;
 
 import com.google.gson.*;
-import br.com.eduard.storage.api.annotations.StorageAttributes;
+import br.com.eduard.storage.annotations.StorageAttributes;
 import org.bukkit.OfflinePlayer;
 
 import br.com.eduard.mine_utils.FakePlayer;
-import br.com.eduard.storage.api.Storable;
+import br.com.eduard.storage.Storable;
 
 @StorageAttributes(inline = true)
 public class OfflinePlayerStorable implements Storable<OfflinePlayer>, JsonSerializer<OfflinePlayer>, JsonDeserializer<OfflinePlayer> {

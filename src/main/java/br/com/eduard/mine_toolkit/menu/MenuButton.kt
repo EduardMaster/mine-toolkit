@@ -3,7 +3,7 @@ package br.com.eduard.mine_toolkit.menu
 import br.com.eduard.mine_utils.game.ItemBuilder
 import br.com.eduard.mine_utils.Mine
 import br.com.eduard.mine_utils.MineReflect
-import br.com.eduard.storage.api.annotations.StorageReference
+import br.com.eduard.storage.annotations.StorageReference
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory

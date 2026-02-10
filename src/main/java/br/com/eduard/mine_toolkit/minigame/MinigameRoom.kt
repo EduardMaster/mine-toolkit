@@ -3,8 +3,8 @@ package br.com.eduard.mine_toolkit.minigame
 import br.com.eduard.database.annotations.ColumnPrimary
 import br.com.eduard.java_utils.Extra
 import org.bukkit.entity.Player
-import br.com.eduard.storage.api.annotations.StorageIndex
-import br.com.eduard.storage.api.annotations.StorageReference
+import br.com.eduard.storage.annotations.StorageIndex
+import br.com.eduard.storage.annotations.StorageReference
 import org.bukkit.Bukkit
 
 /**

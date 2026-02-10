@@ -4,7 +4,7 @@ import org.bukkit.Location
 import org.bukkit.World
 
 import br.com.eduard.java_utils.Copyable
-import br.com.eduard.storage.api.annotations.StorageIndex
+import br.com.eduard.storage.annotations.StorageIndex
 import org.bukkit.Bukkit
 import org.bukkit.util.Vector
 import kotlin.collections.iterator

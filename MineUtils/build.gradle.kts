@@ -15,7 +15,7 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = "br.com.eduard"
-            artifactId = "mineutils"
+            artifactId = "mine_utils"
             version = project.version as String
             from(components["java"])
         }
@@ -36,7 +36,7 @@ repositories {
 
 dependencies {
     compileOnly(kotlin("stdlib"))
-    compileOnly(project(":JavaUtils"))
+    implementation("com.github.EduardMaster:java-utils:1.0.0")
     compileOnly("org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT")
     compileOnly("net.md-5:bungeecord-api:1.21-R0.1-SNAPSHOT")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")

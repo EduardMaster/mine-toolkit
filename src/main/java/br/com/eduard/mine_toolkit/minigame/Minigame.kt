@@ -11,7 +11,7 @@ import br.com.eduard.mine_utils.BukkitBungeeAPI
 import br.com.eduard.mine_utils.FakePlayer
 import br.com.eduard.mine_utils.Mine
 import br.com.eduard.mine_toolkit.score.DisplayBoard
-import br.com.eduard.storage.api.annotations.StorageIndex
+import br.com.eduard.storage.annotations.StorageIndex
 import java.io.File
 import java.util.Locale.getDefault
 

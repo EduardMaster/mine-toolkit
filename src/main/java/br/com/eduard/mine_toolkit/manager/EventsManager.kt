@@ -5,43 +5,50 @@ import org.bukkit.Bukkit
 import org.bukkit.event.HandlerList
 import org.bukkit.event.Listener
 import org.bukkit.plugin.java.JavaPlugin
-
 /**
- * Controlador de Eventos ([Listener])
+ * A base class designed to simplify the lifecycle management of Bukkit [Listener] instances.
+ *
+ * This manager provides automated methods to register and unregister events, ensuring that
+ * listeners are correctly bound to their parent plugin and cleaned up when necessary.
  *
  * @author Eduard
- * @version 2.0
+ * @version 1.0
  */
 open class EventsManager : Listener {
     /**
-     * Se o Listener esta registrado
+     * Indicates whether the [Listener] is currently registered with the Bukkit PluginManager.
      */
     @Transient
     var isRegistered: Boolean = false
 
     /**
-     * Plugin utilizado para registrar o Listener
+     * The [JavaPlugin] instance responsible for managing this listener.
      */
     @Transient
     var plugin: JavaPlugin = defaultPlugin()
 
-
     /**
-     * Pega o Plugin que ligou esta classe
+     * Automatically discovers the plugin instance that provided this class.
+     * * @return The [JavaPlugin] associated with this class.
      */
     private fun defaultPlugin(): JavaPlugin {
-
         return JavaPlugin.getProvidingPlugin(javaClass)
     }
 
-    open fun register(plugin: IPluginInstance) {
+    /**
+     * Registers the listener using a custom plugin instance wrapper.
+     * * @param plugin The [IPluginInstance] wrapper containing the [JavaPlugin].
+     */
+    open fun register(plugin: IPluginInstance<*>) {
         registerListener(plugin.plugin as JavaPlugin)
     }
 
     /**
-     * Registra o Listener para o Plugin
+     * Registers this class as an event listener in the Bukkit server.
+     * * If the listener is already registered, it will be unregistered first to
+     * prevent duplicate event handling.
      *
-     * @param plugin Plugin
+     * @param plugin The [JavaPlugin] instance used to register the events.
      */
     open fun registerListener(plugin: JavaPlugin) {
         unregisterListener()
@@ -50,15 +57,14 @@ open class EventsManager : Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin)
     }
 
-
     /**
-     * Desregistra o Listener
+     * Unregisters the listener from all [HandlerList]s.
+     * * This method effectively stops this class from receiving further Bukkit events.
+     * If the listener is not currently registered, this call does nothing.
      */
     fun unregisterListener() {
         if (!isRegistered) return
         HandlerList.unregisterAll(this)
         this.isRegistered = false
     }
-
 }
-

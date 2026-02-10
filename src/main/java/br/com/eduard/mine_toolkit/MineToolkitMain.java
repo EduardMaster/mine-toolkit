@@ -14,18 +14,13 @@ public class MineToolkitMain extends JavaPlugin {
 
     public MineToolkit mineToolkit;
     public MineToolkitMain() {
-
         new LibraryLoader(getClassLoader(),new File("libs/")).loadLibraries();
     }
 
     @Override
     public void onLoad() {
-        getConfig().addDefault("eduardapi-enabled", true);
-        saveConfig();
-        if (getConfig().getBoolean(("eduardapi-enabled"))){
-            mineToolkit = new MineToolkit(this);
-            mineToolkit.onLoad();
-        }
+        mineToolkit = new MineToolkit(this);
+        mineToolkit.onLoad();
     }
 
     @Override
@@ -34,7 +29,7 @@ public class MineToolkitMain extends JavaPlugin {
             mineToolkit = new MineToolkit(this);
             mineToolkit.onLoad();
         }
-            mineToolkit.onEnable();
+       mineToolkit.onEnable();
     }
 
     @Override

@@ -1,13 +1,13 @@
 package br.com.eduard.storage.storables;
 
 import br.com.eduard.java_utils.Extra;
-import br.com.eduard.storage.api.annotations.StorageAttributes;
+import br.com.eduard.storage.annotations.StorageAttributes;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import br.com.eduard.mine_utils.Mine;
-import br.com.eduard.storage.api.Storable;
+import br.com.eduard.storage.Storable;
 
 @StorageAttributes(inline = true)
 public class InventoryStorable implements Storable<Inventory> {

@@ -6,7 +6,6 @@ import br.com.eduard.mine_toolkit.hybrid.ISender
 import br.com.eduard.java_utils.Extra
 import br.com.eduard.mine_toolkit.plugin.IPluginInstance
 import java.util.ArrayList
-import java.util.Locale
 import java.util.Locale.getDefault
 
 open class Command(
@@ -19,7 +18,7 @@ open class Command(
         var MESSAGE_PERMISSION = "§cVocê não possui permissão para executar este comando. §f%permission"
         val COMMANDS = mutableListOf<Command>()
 
-        fun unregisterCommands(plugin: IPluginInstance) {
+        fun unregisterCommands(plugin: IPluginInstance<*>) {
             val commandsToUnregister = COMMANDS.filter { plugin == it.plugin }
             commandsToUnregister.forEach {
                 it.unregister()
@@ -37,7 +36,7 @@ open class Command(
     var parent: Command? = null
 
     @Transient
-    var plugin: IPluginInstance? = null
+    var plugin: IPluginInstance<*>? = null
 
     @Transient
     var command: HybridCommand? = null
@@ -175,7 +174,7 @@ open class Command(
         COMMANDS.remove(this)
     }
 
-    fun register(main: IPluginInstance) {
+    fun register(main: IPluginInstance<*>) {
         if (usage.isEmpty()) {
             usage = autoUsage()
         }

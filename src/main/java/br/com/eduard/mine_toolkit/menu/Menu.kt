@@ -18,7 +18,7 @@ import br.com.eduard.java_utils.Extra
 import br.com.eduard.mine_utils.Mine
 import br.com.eduard.mine_utils.MineReflect
 import br.com.eduard.mine_toolkit.plugin.IPluginInstance
-import br.com.eduard.storage.api.annotations.StorageIndex
+import br.com.eduard.storage.annotations.StorageIndex
 import org.bukkit.Sound
 import org.bukkit.event.block.Action
 import org.bukkit.event.inventory.InventoryCloseEvent
@@ -650,14 +650,14 @@ open class Menu(
      * Alias para Menu#registerMenu(plugin)
      * @param plugin Plugin
      */
-    override fun register(plugin: IPluginInstance) {
+    override fun register(plugin: IPluginInstance<*>) {
         registerMenu(plugin)
     }
 
     /**
      * Registra o Listener deste menu e de seus submenus e configura nomes de botões sem nomes
      */
-    open fun registerMenu(pluginInstance: IPluginInstance) {
+    open fun registerMenu(pluginInstance: IPluginInstance<*>) {
         registerJavaMenu(pluginInstance.plugin as JavaPlugin)
     }
 

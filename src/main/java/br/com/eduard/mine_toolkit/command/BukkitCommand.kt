@@ -18,10 +18,10 @@ class BukkitCommand(val command: br.com.eduard.mine_toolkit.command.Command)
     TabCompleter, HybridCommand {
 
 
-    override fun register(plugin: IPluginInstance) {
+    override fun register(plugin: IPluginInstance<*>) {
         register(plugin.plugin as JavaPlugin)
     }
-    override fun unregister(plugin: IPluginInstance){
+    override fun unregister(plugin: IPluginInstance<*>){
         unregister(plugin.plugin as JavaPlugin)
     }
     /**

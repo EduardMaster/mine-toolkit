@@ -1,7 +1,7 @@
 package br.com.eduard.mine_toolkit.game
 
 import br.com.eduard.java_utils.Copyable
-import br.com.eduard.storage.api.annotations.StorageAttributes
+import br.com.eduard.storage.annotations.StorageAttributes
 import org.bukkit.Bukkit
 import org.bukkit.Chunk
 import org.bukkit.Location

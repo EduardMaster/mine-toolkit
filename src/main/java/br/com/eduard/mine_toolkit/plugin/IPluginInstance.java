@@ -3,9 +3,9 @@ package br.com.eduard.mine_toolkit.plugin;
 
 import java.io.File;
 
-public interface IPluginInstance {
+public interface IPluginInstance<PluginType> {
 
-    Object getPlugin();
+    PluginType getPlugin();
 
     String getSystemName();
 

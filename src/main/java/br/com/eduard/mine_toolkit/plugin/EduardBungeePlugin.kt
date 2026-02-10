@@ -1,223 +1,167 @@
-package br.com.eduard.mine_toolkit.plugin;
+package br.com.eduard.mine_toolkit.plugin
 
-import br.com.eduard.database.HybridTypes;
-import br.com.eduard.mine_toolkit.kotlin.ModuleResolverKt;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.val;
-import br.com.eduard.mine_toolkit.config.Config;
-import br.com.eduard.database.DBManager;
-import br.com.eduard.database.SQLManager;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.plugin.Command;
-import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.api.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
-import java.util.List;
+import br.com.eduard.database.DBManager
+import br.com.eduard.database.DatabaseManager
+import br.com.eduard.database.HybridTypes
+import br.com.eduard.database.SQLManager
+import br.com.eduard.mine_toolkit.config.Config
+import br.com.eduard.mine_toolkit.kotlin.resolvePut
+import br.com.eduard.mine_toolkit.kotlin.resolveTake
+import net.md_5.bungee.api.ProxyServer
+import net.md_5.bungee.api.chat.TextComponent
+import net.md_5.bungee.api.plugin.Command
+import net.md_5.bungee.api.plugin.Listener
+import net.md_5.bungee.api.plugin.Plugin
+import java.io.File
 
 /**
- * Todos plugins para BungeeCord e Waterfall feitos pelo Eduard extendem esta classe<br>
+ * Todos plugins para BungeeCord e Waterfall feitos pelo Eduard extendem esta classe<br></br>
  */
-@Setter
-@Getter
-public class EduardBungeePlugin extends Plugin implements IPluginInstance {
-
-    public boolean getBoolean(@NotNull String key){
-        return getConfigs().getBoolean(key);
-    }
-
-    public  int getInt(@NotNull String key){
-        return getConfigs().getInt(key);
-    }
-
-    public double getDouble(@NotNull String key){
-        return getConfigs().getDouble(key);
-    }
-
-    @NotNull
-    public String message(@NotNull String key){
-        return getMessages().message(key);
-    }
-
-    @NotNull
-    public List<String> getMessages(@NotNull String key){
-        return  getMessages().getMessages(key);
-    }
+class EduardBungeePlugin : Plugin(), IPluginInstance<Plugin> {
 
 
-    @NotNull
-    public  String getString(@NotNull String key) {
-        return getConfigs().message(key);
-    }
+    val started: Boolean = false
+    val isFree: Boolean = false
 
-    public boolean getStarted() {
-        return started;
-    }
-
-    private boolean started = false;
-    private boolean isFree= false;
-
-    public boolean isFree() {
-        return isFree;
-    }
-
-    private Config configs = null;
-    public Config getConfig(){
-        return configs;
-    }
-
-    private Config messages = null;
-    private String prefix = null;
-    private Config storage = null;
-    private SQLManager sqlManager = null;
-    private DBManager dbManager = null;
-    private PluginSettings settings = null;
-
-    public Config getMessages() {
-        return messages;
-    }
-
-    public Config getConfigs() {
-        return configs;
-    }
-
-    public Config getStorage() {
-        return storage;
-    }
-
-    public DBManager getDbManager() {
-        return dbManager;
-    }
-
-    public PluginSettings getSettings() {
-        return settings;
-    }
-
-    public SQLManager getSqlManager() {
-        return sqlManager;
-    }
-
-
-    public String getPrefix() {
-        if (prefix == null){
-           prefix= "["+getPluginName()+"] ";
+    var prefix: String? = null
+        get() {
+            if (field == null) {
+                field = "[" + this.pluginName + "] "
+            }
+            return field
         }
-        return prefix;
-    }
-
-    @NotNull
-    public String getPluginName() {
-        return getPlugin().getDescription().getName();
-    }
-
-    @NotNull
-    public File getPluginFolder() {
-        return getPlugin().getDataFolder();
-    }
+        private set
+    lateinit var config: Config
+    lateinit var messages: Config
+    lateinit var storage: Config
+    lateinit var settings: PluginSettings
+    lateinit var dbManager: DBManager
+    lateinit var sqlManager: SQLManager
 
 
+    val pluginName: String
+        get() = plugin.description.name
 
-    public void registerEvents(Listener events) {
-        ProxyServer.getInstance().getPluginManager()
-                .registerListener(this, events);
-    }
-
-    public void registerCommand(Command comand) {
-        ProxyServer.getInstance().getPluginManager().registerCommand(this, comand);
-    }
-    public void console(@NotNull String message) {
-        ProxyServer.getInstance().getConsole().sendMessage(new TextComponent(message));
+    override fun getPluginFolder(): File {
+        return plugin.dataFolder
     }
 
 
-    public Plugin getPlugin() {
-        return this;
+    fun registerEvents(events: Listener) {
+        ProxyServer.getInstance().pluginManager
+            .registerListener(this, events)
     }
 
-    @Override
-    public String getSystemName() {
-        return getDescription().getName();
+    fun registerCommand(comand: Command) {
+        ProxyServer.getInstance().pluginManager.registerCommand(this, comand)
     }
 
-
-    public void log(@NotNull String message) {
-
-        console("§b"+getPrefix() +"§a"+ message);
-    }
-
-    public void error(@NotNull String message) {
-        console("§e"+getPrefix() +"§c"+ message);
+    fun console(message: String) {
+        ProxyServer.getInstance().console.sendMessage(TextComponent(message))
     }
 
 
-    public void onLoad() {
-        val loadingHybrids = HybridTypes.INSTANCE;
-        val currentInstance = this;
-        if (!currentInstance.getStarted()) {
-            currentInstance.setDbManager(new DBManager());
-            currentInstance.setConfigs(new Config(currentInstance, "config.yml"));
-            currentInstance.setMessages(new Config(currentInstance, "messages.yml"));
-            currentInstance.setStorage(new Config(currentInstance, "storage.yml"));
-            currentInstance.setSettings(new PluginSettings());
-            currentInstance.getConfigs().add("settings", currentInstance.getSettings());
-            currentInstance.getConfigs().add("database", currentInstance.getDbManager());
-            currentInstance.getConfigs().saveConfig();
-            currentInstance.setSettings(currentInstance.getConfigs().get("settings", PluginSettings.class));
-            currentInstance.setDbManager(currentInstance.getConfigs().get("database", DBManager.class));
-            currentInstance.setSqlManager(new SQLManager(currentInstance.getDbManager()));
+    override fun getPlugin(): Plugin {
+        return this
+    }
+
+    override fun getSystemName(): String {
+        return description.name
+    }
+
+
+    fun log(message: String) {
+        console("§b" + this.prefix + "§a" + message)
+    }
+
+    fun error(message: String) {
+        console("§e" + this.prefix + "§c" + message)
+    }
+
+
+    override fun onLoad() {
+        val loadingHybrids: HybridTypes = HybridTypes
+        val currentInstance = this
+        if (!currentInstance.started) {
+            currentInstance.dbManager = DatabaseManager()
+            currentInstance.config =(Config(currentInstance, "config.yml"))
+            currentInstance.messages =(Config(currentInstance, "messages.yml"))
+            currentInstance.storage=(Config(currentInstance, "storage.yml"))
+            currentInstance.settings=(PluginSettings())
+            currentInstance.config.add("settings", currentInstance.settings)
+            currentInstance.config.add("database", currentInstance.dbManager)
+            currentInstance.config.saveConfig()
+            currentInstance.settings = currentInstance.config["settings", PluginSettings::class.java]
+            currentInstance.dbManager= (currentInstance.config["database", DBManager::class.java])
+            currentInstance.sqlManager= (SQLManager(currentInstance.dbManager))
             //  currentInstance.setStorageManager(new StorageManager(currentInstance.getSqlManager()));
-            currentInstance.setStarted(true);
+            //currentInstance.setStarted(true)
+
             // currentInstance.getStorageManager().setType(currentInstance.getSettings().getStoreType());
-            if (currentInstance.getDbManager().isEnabled()) {
-                currentInstance.getDbManager().openConnection();
+            if (currentInstance.dbManager.isEnabled) {
+                currentInstance.dbManager.openConnection()
             }
         }
-
-    }
-    public void onActivation(){
-
-    }
-    public void onEnable() {
-        if (!started) onLoad();
-        ModuleResolverKt.resolvePut(this);
-    }
-    public void onDisable() {
-        ModuleResolverKt.resolveTake(this);
-    }
-    public void save() {
-
     }
 
-    public void reload() {
-
+    fun onActivation() {
     }
 
-    public void configDefault() {
-
-    }
-    public void unregisterTasks() {
-
+    override fun onEnable() {
+        if (!started) onLoad()
+        resolvePut<EduardBungeePlugin>(this)
     }
 
-    public void unregisterServices() {
-
+    override fun onDisable() {
+        resolveTake<EduardBungeePlugin>(this)
     }
 
-    public void unregisterListeners() {
-
+    fun save() {
     }
 
-    public void unregisterCommands() {
-
+    fun reload() {
     }
 
-    public void unregisterStorableClasses() {
+    fun configDefault() {
+    }
 
+    fun unregisterTasks() {
+    }
+
+    fun unregisterServices() {
+    }
+
+    fun unregisterListeners() {
+    }
+
+    fun unregisterCommands() {
+    }
+
+    fun unregisterStorableClasses() {
+    }
+
+    fun getBoolean(key: String): Boolean {
+        return this.config.getBoolean(key)
+    }
+
+    fun getInt(key: String): Int {
+        return this.config.getInt(key)
+    }
+
+    fun getDouble(key: String): Double {
+        return this.config.getDouble(key)
+    }
+
+    fun message(key: String): String {
+        return this.messages.message(key)
+    }
+
+    fun getMessages(key: String): MutableList<String> {
+        return (this.messages.getMessages(key) ?: mutableListOf<String>()) as MutableList<String>
     }
 
 
-
+    fun getString(key: String): String {
+        return this.config.message(key)
+    }
 }

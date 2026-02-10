@@ -11,7 +11,7 @@ import br.com.eduard.mine_toolkit.kotlin.player
 import br.com.eduard.mine_toolkit.manager.CurrencyManager
 import br.com.eduard.mine_toolkit.plugin.IPluginInstance
 import br.com.eduard.mine_toolkit.server.CurrencySystem
-import br.com.eduard.storage.api.annotations.StorageAttributes
+import br.com.eduard.storage.annotations.StorageAttributes
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -361,7 +361,7 @@ open class Shop(name: String, lineAmount: Int) : Menu(name, lineAmount) {
         return null
     }
 
-    override fun register(plugin: IPluginInstance) {
+    override fun register(plugin: IPluginInstance<*>) {
         super.register(plugin)
         menuUpgrades?.register(plugin)
         menuConfirmation?.register(plugin)
